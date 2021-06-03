@@ -1,3 +1,9 @@
+## Visual Studio Code
+.vscode
+
+## Temporary files
+.DS_Store
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -30,3 +36,7 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+
+## Terragrunt
+backend.tf
+provider.tf
