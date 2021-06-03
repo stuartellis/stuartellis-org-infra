@@ -3,5 +3,5 @@ include {
 }
 
 terraform {
-  source = "git@github.com:stuartellis/stuart-ellis-org-tf-modules.git//notifications?ref=develop"
+  source = "git::git@github.com:stuartellis/stuart-ellis-org-tf-modules.git//aws/notifications?ref=develop"
 }
