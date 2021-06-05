@@ -21,12 +21,8 @@ In the managed account, use CloudFormation to deploy a role:
 
 ## Usage
 
-To apply all of the Terraform code:
+To apply the Terraform code for a region in an account:
 
-    cd tf
-    terragrunt run-all apply
-
-To run the code for an environment:
-
-    cd tf/stuart-ellis-labs
-    terragrunt apply --terragrunt-source ../../../stuart-ellis-org-tf-modules//aws/notifications
+    cd tf/stuart-ellis-origin/eu-west-1
+    terragrunt run-all plan --terragrunt-source-update 
+    terragrunt run-all apply 

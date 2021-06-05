@@ -11,16 +11,19 @@ Parameters:
   Environment:
     Type: String
     Description: The name of the environment
-  TfExecRoleArn:
+  TfArnSameAccountExecRole:
     Type: String
-    Description: The ARN of the role in the account that is being managed
-  TfKmsKeyBackendImport:
+    Description: The ARN of the role in the same AWS account
+  TfArnExecRole0001:
+    Type: String
+    Description: The ARN of the role in an account that is being managed
+  TfImportKmsKeyBackend:
     Type: String
     Description: Name of exported value that provides the ARN of the KMS key for the Terraform state
-  TfS3BackendImport:
+  TfImportS3Backend:
     Type: String
     Description: Name of exported value that provides the ARN of the S3 bucket for the Terraform state
-  TfDdbBackendImport:
+  TfImportDdbBackend:
     Type: String
     Description: Name of exported value that provides the ARN of the DynamoDB table for Terraform locking
 
@@ -31,7 +34,7 @@ Resources:
     Properties: 
       GroupName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-users
 
-  TfManagedAccountExecPolicy:
+  TfManagedAccountsExecPolicy:
     Type: AWS::IAM::Policy
     Properties:
       PolicyName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-exec
@@ -43,8 +46,9 @@ Resources:
           Effect: Allow
           Action: 
             - sts:AssumeRole
-          Resource: 
-            - !Ref TfExecRoleArn
+          Resource:
+            - !Ref TfArnSameAccountExecRole
+            - !Ref TfArnExecRole0001
  
   TfBackendAccessPolicy:
     Type: AWS::IAM::Policy
@@ -61,13 +65,13 @@ Resources:
               - kms:GenerateDataKey
             Resource:
               - !ImportValue 
-                'Fn::Sub': ${TfKmsKeyBackendImport}
+                'Fn::Sub': ${TfImportKmsKeyBackend}
           - Effect: Allow
             Action:
               - s3:ListBucket
             Resource:
               - !ImportValue 
-                'Fn::Sub': ${TfS3BackendImport}
+                'Fn::Sub': ${TfImportS3Backend}
           - Effect: Allow
             Action:
               - s3:PutObject
@@ -77,7 +81,7 @@ Resources:
               - 'Fn::Join': 
                 - '/'
                 - - !ImportValue
-                    'Fn::Sub': ${TfS3BackendImport}
+                    'Fn::Sub': ${TfImportS3Backend}
                   - '*'
           - Effect: Allow
             Action:
@@ -87,7 +91,7 @@ Resources:
               - dynamodb:PutItem
             Resource:
               - !ImportValue 
-                'Fn::Sub': ${TfDdbBackendImport}
+                'Fn::Sub': ${TfImportDdbBackend}
 
   TfAccessUser0001:
     Type: AWS::IAM::User
