@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+  AWS resources for Terraform access
+Parameters:
+  Prefix:
+    Type: String
+    Description: The prefix for AWS resource names
+  ProjectName:
+    Type: String
+    Description: The name of the project
+  Environment:
+    Type: String
+    Description: The name of the environment
+  TfExecRoleArn:
+    Type: String
+    Description: The ARN of the role in the account that is being managed
+  TfKmsKeyBackendImport:
+    Type: String
+    Description: Name of exported value that provides the ARN of the KMS key for the Terraform state
+  TfS3BackendImport:
+    Type: String
+    Description: Name of exported value that provides the ARN of the S3 bucket for the Terraform state
+  TfDdbBackendImport:
+    Type: String
+    Description: Name of exported value that provides the ARN of the DynamoDB table for Terraform locking
+
+Resources:
+
+  TfAccessGroup:
+    Type: AWS::IAM::Group
+    Properties: 
+      GroupName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-users
+
+  TfManagedAccountExecPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-exec
+      Groups: 
+       - !Ref TfAccessGroup
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          Effect: Allow
+          Action: 
+            - sts:AssumeRole
+          Resource: 
+            - !Ref TfExecRoleArn
+ 
+  TfBackendAccessPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-backend
+      Groups: 
+       - !Ref TfAccessGroup
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - kms:Decrypt
+              - kms:GenerateDataKey
+            Resource:
+              - !ImportValue 
+                'Fn::Sub': ${TfKmsKeyBackendImport}
+          - Effect: Allow
+            Action:
+              - s3:ListBucket
+            Resource:
+              - !ImportValue 
+                'Fn::Sub': ${TfS3BackendImport}
+          - Effect: Allow
+            Action:
+              - s3:PutObject
+              - s3:GetObject
+              - s3:ListBucket
+            Resource:
+              - 'Fn::Join': 
+                - '/'
+                - - !ImportValue
+                    'Fn::Sub': ${TfS3BackendImport}
+                  - '*'
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:DeleteItem
+            Resource:
+              - !ImportValue 
+                'Fn::Sub': ${TfDdbBackendImport}
+
+  TfAccessUser0001:
+    Type: AWS::IAM::User
+    Properties: 
+      Groups: 
+        - !Ref TfAccessGroup
+      UserName: !Sub ${Prefix}.${ProjectName}.${Environment}.tfuser
+      Tags:
+        - Key: sje:purpose
+          Value: terraform-access
+
+Outputs:
+  TfAccessGroup:
+    Value: !Ref TfAccessGroup
+  TfAccessUser0001:
+    Value: !Ref TfAccessUser0001
