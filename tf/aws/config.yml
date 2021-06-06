@@ -1,0 +1,12 @@
+root_email: aws@stuartellis.name
+projects:
+  app0001:
+    name: app0001
+    email: app0001@stuartellis.name
+  app0002:
+    name: app0002
+    email: app0002@stuartellis.name
+  app0003:
+    name: app0003
+    email: app0003@stuartellis.name
+  
