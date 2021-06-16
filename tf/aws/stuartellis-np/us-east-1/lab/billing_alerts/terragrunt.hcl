@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "git::git@github.com:stuartellis/stuart-ellis-org-tf-modules.git//aws/billing_alerts?ref=develop"
+  source = "git::git@github.com:stuartellis/stuartellis-org-tf-modules.git//aws/billing_alerts?ref=develop"
 }
 
 dependency "notifications" {

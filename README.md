@@ -1,4 +1,4 @@
-# stuart-ellis-org-infra
+# stuartellis-org-infra
 
 Automation for stuartellis.org environments.
 
@@ -23,7 +23,7 @@ In the managed account, use CloudFormation to deploy a role:
 
 To apply the Terraform code for a region in an account:
 
-    cd tf/aws/stuart-ellis-labs/eu-west-1
+    cd tf/aws/stuartellis-labs/eu-west-1
     terragrunt run-all plan --terragrunt-source-update
     terragrunt run-all apply 
 
