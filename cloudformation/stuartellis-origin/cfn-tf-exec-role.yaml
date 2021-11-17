@@ -5,12 +5,6 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
-  ProjectName:
-    Type: String
-    Description: The name of the project
-  Environment:
-    Type: String
-    Description: The name of the environment
   ManagedPolicyName:
     Type: String
     Default: AdministratorAccess
@@ -23,8 +17,8 @@ Resources:
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-exec
-      Description: !Sub ${Prefix} ${ProjectName} Terraform execution for ${Environment}
+      RoleName: !Sub ${Prefix}-tf-exec
+      Description: !Sub Terraform execution for ${Prefix}
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:

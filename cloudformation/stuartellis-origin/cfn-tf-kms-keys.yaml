@@ -5,21 +5,12 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
-  ProjectName:
-    Type: String
-    Description: The name of the project
-  ServiceName:
-    Type: String
-    Description: The name of the service that the key is used for
-  Environment:
-    Type: String
-    Description: The name of the environment
 
 Resources:
   KmsKey0001:
     Type: AWS::KMS::Key
     Properties: 
-      Description: !Sub ${Prefix} ${ProjectName} key for ${ServiceName} on ${Environment}
+      Description: !Sub ${Prefix} key
       Enabled: True
       KeyPolicy:
         Version: 2012-10-17
@@ -32,14 +23,11 @@ Resources:
       EnableKeyRotation: true         
       KeySpec: SYMMETRIC_DEFAULT
       PendingWindowInDays: 7 # Default is 30 days
-      Tags:
-        - Key: sje:related-service
-          Value: !Sub ${ServiceName}
 
   KmsKey0001Alias:
     Type: AWS::KMS::Alias
     Properties: 
-      AliasName: !Sub "alias/${Prefix}/${ProjectName}/${Environment}/${ServiceName}/tfstate" # Aliases must begin with alias/
+      AliasName: !Sub "alias/${Prefix}/tfstate" # Aliases must begin with alias/
       TargetKeyId: !Ref KmsKey0001
 
 Outputs:

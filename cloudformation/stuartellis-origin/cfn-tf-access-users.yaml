@@ -5,12 +5,6 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
-  ProjectName:
-    Type: String
-    Description: The name of the project
-  Environment:
-    Type: String
-    Description: The name of the environment
   TfArnSameAccountExecRole:
     Type: String
     Description: The ARN of the role in the same AWS account
@@ -32,12 +26,12 @@ Resources:
   TfAccessGroup:
     Type: AWS::IAM::Group
     Properties: 
-      GroupName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-users
+      GroupName: !Sub ${Prefix}-tf-users
 
   TfManagedAccountsExecPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-exec
+      PolicyName: !Sub ${Prefix}-tf-exec
       Groups: 
        - !Ref TfAccessGroup
       PolicyDocument:
@@ -53,7 +47,7 @@ Resources:
   TfBackendAccessPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ${Prefix}-${ProjectName}-${Environment}-tf-backend
+      PolicyName: !Sub ${Prefix}-tf-backend
       Groups: 
        - !Ref TfAccessGroup
       PolicyDocument:
@@ -98,7 +92,7 @@ Resources:
     Properties: 
       Groups: 
         - !Ref TfAccessGroup
-      UserName: !Sub ${Prefix}.${ProjectName}.${Environment}.tfuser
+      UserName: !Sub ${Prefix}.tfuser
       Tags:
         - Key: sje:purpose
           Value: terraform-access

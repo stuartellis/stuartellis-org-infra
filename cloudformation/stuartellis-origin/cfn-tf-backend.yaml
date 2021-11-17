@@ -5,12 +5,6 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
-  ProjectName:
-    Type: String
-    Description: The name of the project
-  Environment:
-    Type: String
-    Description: The name of the environment
   KmsKeyImport:
     Type: String
     Description: Name of exported value that provides the ARN of the encryption key
@@ -19,7 +13,7 @@ Resources:
   TfBackendBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${Prefix}-${ProjectName}-${Environment}-tfstate-${AWS::Region}
+      BucketName: !Sub ${Prefix}-tfstate-${AWS::Region}
       VersioningConfiguration:
         Status: Enabled
       PublicAccessBlockConfiguration:
@@ -41,7 +35,7 @@ Resources:
   TfBackendDynamoDbTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub ${Prefix}-${ProjectName}-${Environment}-tfstate-lock-${AWS::Region}
+      TableName: !Sub ${Prefix}-tfstate-lock-${AWS::Region}
       BillingMode: PAY_PER_REQUEST
       KeySchema:
         - AttributeName: LockID
