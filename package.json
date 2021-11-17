@@ -1,0 +1,27 @@
+{
+  "name": "stuartellis-org-infra",
+  "version": "0.1.0",
+  "description": "Infrastructure for stuartellis.org",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "cloudformation/**/*.{yml,yaml}": "cfn-lint --include-checks I -t"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stuartellis/stuartellis-org-infra.git"
+  },
+  "author": "Stuart Ellis <stuart@stuartellis.name>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stuartellis/stuartellis-org-infra/issues"
+  },
+  "homepage": "https://github.com/stuartellis/stuartellis-org-infra#readme",
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "lint-staged": "^12.0.2"
+  }
+}

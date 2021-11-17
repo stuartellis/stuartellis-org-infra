@@ -41,3 +41,6 @@ override.tf.json
 backend.tf
 provider.tf
 .terragrunt-cache
+
+## Node.js files
+node_modules
