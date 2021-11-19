@@ -12,6 +12,8 @@ Parameters:
 Resources:
   TfBackendBucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       BucketName: !Sub ${Prefix}-tfstate-${AWS::Region}
       VersioningConfiguration:
@@ -34,6 +36,8 @@ Resources:
 
   TfBackendDynamoDbTable:
     Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       TableName: !Sub ${Prefix}-tfstate-lock-${AWS::Region}
       BillingMode: PAY_PER_REQUEST
