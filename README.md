@@ -6,16 +6,9 @@ This uses [Terraform](https://www.terraform.io/) and [Terragrunt](https://terrag
 
 ## Setup
 
-In the origin account, first use CloudFormation to set up the backend:
+In the origin account, first use CloudFormation to set up the backend. See *cloudformation/stuartellis-origin/README.md* for details.
 
-- cfn-tf-kms-keys.yml
-- cfn-tf-kms-storage.yml
-
-Then use CloudFormation to add the user account for Terraform:
-
-- cfn-tf-access-users.yml
-
-In the managed account, use CloudFormation to deploy a role:
+In the managed accounts, use CloudFormation to deploy an IAM role for Terraform:
 
 - cfn-tf-exec-role.yml
 
@@ -31,7 +24,7 @@ To apply the Terraform code for a region in an account:
 
 Each stack includes a *terragrunt.hcl* configuration file.
 
-The configuration file specifies the module that the stack uses, and includes the *root.hcl* file. The *root.hcl* file reads all *config.yml* and *config.yaml* files, and merges their contents into a single *merged_config* object.
+The configuration file specifies the module that the stack uses, and includes the *root.hcl* file. The *root.hcl* file reads all *config.yml* and *config.yml* files, and merges their contents into a single *merged_config* object.
 
 Use *local.merged_config* to reference variables from the *merged_config*:
 
