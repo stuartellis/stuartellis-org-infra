@@ -8,16 +8,16 @@ This uses [Terraform](https://www.terraform.io/) and [Terragrunt](https://terrag
 
 In the origin account, first use CloudFormation to set up the backend:
 
-- cfn-tf-kms-keys.yaml
-- cfn-tf-kms-backend.yaml
+- cfn-tf-kms-keys.yml
+- cfn-tf-kms-storage.yml
 
 Then use CloudFormation to add the user account for Terraform:
 
-- cfn-tf-access-users.yaml
+- cfn-tf-access-users.yml
 
 In the managed account, use CloudFormation to deploy a role:
 
-- cfn-tf-exec-role.yaml
+- cfn-tf-exec-role.yml
 
 ## Usage
 
