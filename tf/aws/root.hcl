@@ -45,12 +45,12 @@ remote_state {
   }
 
   config = {
-    bucket         = "stuartellis-longhouse-dev-tfstate-eu-west-1"
+    bucket         = "infra-tfstate-eu-west-1"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "eu-west-1"
     encrypt        = true
-    role_arn       = "arn:aws:iam::119559809358:role/stuartellis-longhouse-dev-tf-exec"
-    dynamodb_table = "stuartellis-longhouse-dev-tfstate-lock-eu-west-1"
+    role_arn       = "arn:aws:iam::119559809358:role/infra-tf-exec"
+    dynamodb_table = "infra-tfstate-lock-eu-west-1"
   }
 }
 
