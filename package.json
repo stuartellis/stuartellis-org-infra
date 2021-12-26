@@ -2,7 +2,6 @@
   "name": "stuartellis-org-infra",
   "version": "0.1.0",
   "description": "Infrastructure for stuartellis.org",
-  "main": "index.js",
   "scripts": {
     "clean": "rimraf tf/**/.terragrunt-cache tf/**/.terraform.lock.hcl",
     "test": "echo \"Error: no test specified\" && exit 1",
