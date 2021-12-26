@@ -46,7 +46,7 @@ remote_state {
 
   config = {
     bucket         = "infra-tfstate-eu-west-1"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
+    key            = "aws/${path_relative_to_include()}/terraform.tfstate"
     region         = "eu-west-1"
     encrypt        = true
     role_arn       = "arn:aws:iam::119559809358:role/infra-tf-exec"

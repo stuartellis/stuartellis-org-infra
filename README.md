@@ -14,9 +14,9 @@ In the managed accounts, use CloudFormation to deploy an IAM role for Terraform:
 
 ## Usage
 
-To apply the Terraform code for a region in an account:
+To apply the Terraform code for a region in an environment:
 
-    cd tf/aws/stuartellis-np/eu-west-1
+    cd tf/aws/stuartellis-np/aaa/us-east-1
     terragrunt run-all plan --terragrunt-source-update
     terragrunt run-all apply 
 
