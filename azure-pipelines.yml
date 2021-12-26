@@ -1,0 +1,26 @@
+variables:
+  - template: .azure-pipelines/variables.yml
+
+name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    exclude:
+      - CONTRIBUTING.md
+      - README.md
+
+stages:
+  - stage: test
+    displayName: Test
+    jobs:
+      - job: test
+        displayName: Run tests
+        pool:
+          vmImage: ${{ variables.vmImage }}
+        steps:
+          - bash: echo "$(terraform version)"
+            displayName: Show Terraform version
