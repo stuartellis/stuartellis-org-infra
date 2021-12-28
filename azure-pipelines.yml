@@ -32,6 +32,10 @@ stages:
           - checkout: self
           - checkout: stuartellis-org-tf-modules
           - template: .azure-pipelines/setup-binaries.yml
+            parameters:
+              cacheKeyFile: stuartellis-org-infra/package.json
+              toolName: terragrunt
+              workingDirectory: stuartellis-org-infra
           # - template: .azure-pipelines/run-terragrunt.yml
           #   parameters:
           #     tgCommand: run-all plan

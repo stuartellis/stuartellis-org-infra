@@ -1,12 +1,22 @@
+parameters:
+  - name: cacheKeyFile
+    type: string
+  - name: toolName
+    type: string
+  - name: workingDirectory
+    type: string
+
 steps:
   - task: Cache@2
     inputs:
-      key: ${{ parameters.toolName }} | "$(Agent.OS)" | package.json
+      key: ${{ parameters.toolName }} | "$(Agent.OS)" | ${{ parameters.cacheKeyFile }}
       path: bin
     displayName: Use cache for binaries
   - bash: |
       ./do.sh setup
     displayName: Run setup
+    workingDirectory: ${{ parameters.workingDirectory }}
   - bash: |
       ./do.sh info
     displayName: Show details
+    workingDirectory: ${{ parameters.workingDirectory }}
