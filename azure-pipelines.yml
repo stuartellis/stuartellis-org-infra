@@ -14,13 +14,12 @@ trigger:
       - README.md
 
 stages:
-  - stage: test
-    displayName: Test
+  - stage: run
+    displayName: Run
     jobs:
-      - job: test
-        displayName: Run tests
+      - job: run
+        displayName: Setup Binaries
         pool:
-          vmImage: ${{ variables.vmImage }}
+          vmImage: ${{variables.vmImage}}
         steps:
-          - bash: echo "$(terraform version)"
-            displayName: Show Terraform version
+          - template: .azure-pipelines/setup-binaries.yml
