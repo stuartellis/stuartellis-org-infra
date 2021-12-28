@@ -13,6 +13,13 @@ trigger:
       - CONTRIBUTING.md
       - README.md
 
+resources:
+  repositories:
+    - repository: stuartellis-org-tf-modules
+      type: git
+      name: stuartellis-org-tf-modules
+      ref: refs/heads/develop
+
 stages:
   - stage: run
     displayName: Run
@@ -22,4 +29,6 @@ stages:
         pool:
           vmImage: ${{variables.vmImage}}
         steps:
+          - checkout: self
+          - checkout: stuartellis-org-tf-modules
           - template: .azure-pipelines/setup-binaries.yml
