@@ -10,7 +10,7 @@ steps:
   - task: Cache@2
     inputs:
       key: ${{ parameters.toolName }} | "$(Agent.OS)" | ${{ parameters.cacheKeyFile }}
-      path: bin
+      path: ${{ parameters.workingDirectory }}/bin
     displayName: Use cache for binaries
   - bash: |
       ./do.sh setup
