@@ -19,5 +19,3 @@ steps:
       scriptType: "inline"
       inlineScript: ./bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
       workingDirectory: ${{ parameters.workingDirectory }}
-      env:
-        TF_IN_AUTOMATION: true
