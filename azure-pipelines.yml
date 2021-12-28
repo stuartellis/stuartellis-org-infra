@@ -36,7 +36,7 @@ stages:
               cacheKeyFile: stuartellis-org-infra/package.json
               toolName: terragrunt
               workingDirectory: stuartellis-org-infra
-          # - template: .azure-pipelines/run-terragrunt.yml
-          #   parameters:
-          #     tgCommand: run-all plan
-          #     tgSource: ../../../../../../../../../stuartellis-org-tf-modules
+          - template: .azure-pipelines/run-terragrunt.yml
+            parameters:
+              tgCommand: run-all plan
+              tgSource: ../../../../../../../../../stuartellis-org-tf-modules
