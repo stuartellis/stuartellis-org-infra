@@ -3,7 +3,7 @@ steps:
     inputs:
       key: ${{ parameters.toolName }} | "$(Agent.OS)" | package.json
       path: bin
-    displayName: Use Cache for binaries
+    displayName: Use cache for binaries
   - bash: |
       ./do.sh setup
     displayName: Run setup
