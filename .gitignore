@@ -2,6 +2,7 @@
 .vscode
 
 ## Temporary files
+bin
 .DS_Store
 
 # Local .terraform directories

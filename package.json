@@ -2,8 +2,14 @@
   "name": "stuartellis-org-infra",
   "version": "0.1.0",
   "description": "Infrastructure for stuartellis.org",
+  "config": {
+    "terragrunt": {
+      "version": "0.35.16"
+    }
+  },
   "scripts": {
-    "clean": "rimraf tf/**/.terragrunt-cache tf/**/.terraform.lock.hcl",
+    "clean": "rimraf bin tf/**/.terragrunt-cache tf/**/.terraform.lock.hcl",
+    "install": "./do.sh setup",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
