@@ -1,4 +1,8 @@
 parameters:
+  - name: awsRegion
+    type: string
+  - name: awsServiceConnection
+    type: string
   - name: tgCommand
     type: string
   - name: tgSource
@@ -7,9 +11,13 @@ parameters:
     type: string
 
 steps:
-  - bash: |
-      ./bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
+  - task: AWSShellScript@1
     displayName: Run Terragrunt
-    workingDirectory: ${{ parameters.workingDirectory }}
-    env:
-      TF_IN_AUTOMATION: true
+    inputs:
+      awsCredentials: ${{ parameters.awsServiceConnection }}
+      regionName: ${{ parameters.awsRegion }}
+      scriptType: "inline"
+      inlineScript: ./bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
+      workingDirectory: ${{ parameters.workingDirectory }}
+      env:
+        TF_IN_AUTOMATION: true

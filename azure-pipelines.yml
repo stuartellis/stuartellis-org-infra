@@ -25,7 +25,7 @@ stages:
     displayName: Run
     jobs:
       - job: run
-        displayName: Setup Binaries
+        displayName: Run Terragrunt
         pool:
           vmImage: ${{variables.vmImage}}
         steps:
@@ -38,6 +38,8 @@ stages:
               workingDirectory: stuartellis-org-infra
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
+              awsRegion: eu-west-1
+              awsServiceConnection: sje-aws-origin
               tgCommand: run-all plan
               tgSource: ../../../../../../../../../stuartellis-org-tf-modules
               workingDirectory: stuartellis-org-infra
