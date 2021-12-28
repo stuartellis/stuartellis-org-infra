@@ -40,3 +40,4 @@ stages:
             parameters:
               tgCommand: run-all plan
               tgSource: ../../../../../../../../../stuartellis-org-tf-modules
+              workingDirectory: stuartellis-org-infra

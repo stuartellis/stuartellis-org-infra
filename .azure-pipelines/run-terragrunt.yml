@@ -3,10 +3,13 @@ parameters:
     type: string
   - name: tgSource
     type: string
+  - name: workingDirectory
+    type: string
 
 steps:
   - bash: |
       ./bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
     displayName: Run Terragrunt
+    workingDirectory: ${{ parameters.workingDirectory }}
     env:
       TF_IN_AUTOMATION: true
