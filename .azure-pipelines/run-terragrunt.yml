@@ -16,7 +16,7 @@ steps:
     inputs:
       awsCredentials: ${{ parameters.awsServiceConnection }}
       regionName: ${{ parameters.awsRegion }}
-      scriptType: "inline"
-      inlineScript: ./bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
+      scriptType: inline
+      inlineScript: ../../../../bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}

@@ -34,7 +34,7 @@ stages:
           - template: .azure-pipelines/setup-binaries.yml
             parameters:
               cacheKeyFile: stuartellis-org-infra/package.json
-              toolName: terragrunt
+              cacheName: bin
               workingDirectory: stuartellis-org-infra
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:

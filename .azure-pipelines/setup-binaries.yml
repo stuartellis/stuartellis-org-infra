@@ -1,7 +1,7 @@
 parameters:
   - name: cacheKeyFile
     type: string
-  - name: toolName
+  - name: cacheName
     type: string
   - name: workingDirectory
     type: string
@@ -9,7 +9,7 @@ parameters:
 steps:
   - task: Cache@2
     inputs:
-      key: ${{ parameters.toolName }} | "$(Agent.OS)" | ${{ parameters.cacheKeyFile }}
+      key: ${{ parameters.cacheName }} | "$(Agent.OS)" | ${{ parameters.cacheKeyFile }}
       path: ${{ parameters.workingDirectory }}/bin
     displayName: Use cache for binaries
   - bash: |
