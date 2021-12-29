@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "git::https://dev.azure.com/sjellis/sje-ado-labs/_git/stuartellis-org-tf-modules//aws/sns_topic?ref=develop"
+  source = "../../../../../../../../../stuartellis-org-tf-modules//aws/sns_topic"
 }
 
 inputs = {
