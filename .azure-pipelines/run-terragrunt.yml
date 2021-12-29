@@ -18,4 +18,5 @@ steps:
       regionName: ${{ parameters.awsRegion }}
       scriptType: "inline"
       inlineScript: ./bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
+      disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}
