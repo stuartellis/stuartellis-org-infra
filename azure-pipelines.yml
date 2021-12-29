@@ -42,4 +42,4 @@ stages:
               awsServiceConnection: sje-aws-origin
               tgCommand: run-all plan
               tgSource: ../../../../../../../../../stuartellis-org-tf-modules
-              workingDirectory: stuartellis-org-infra
+              workingDirectory: stuartellis-org-infra/tf/live/aws/stuartellis-origin
