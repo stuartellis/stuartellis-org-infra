@@ -4,10 +4,10 @@ set -euo pipefail
 
 ### Configuration
 
+export BIN_DIR="bin"
+
 TERRAGRUNT_VERSION=$(jq -r .config.terragrunt.version package.json)
 export TERRAGRUNT_VERSION
-
-export BIN_DIR="bin"
 export TERRAGRUNT_EXE=terragrunt
 
 ### Functions
@@ -27,7 +27,7 @@ function specify_os () {
   fi
 }
 
-function specify_download_url () {
+function specify_download_urls () {
   specify_arch
   specify_os
   export TERRAGRUNT_FILE=terragrunt_"$OS"_"$ARCH"
@@ -53,7 +53,7 @@ case $1 in
   info)
     specify_arch
     specify_os
-    specify_download_url
+    specify_download_urls
     echo "CPU arch: $ARCH"
     echo "Operating system: $OS"
     echo "Expected Terragrunt version: $TERRAGRUNT_VERSION"
@@ -66,12 +66,15 @@ case $1 in
   setup)
     specify_arch
     specify_os
-    specify_download_url
+    specify_download_urls
     [ -d "$BIN_DIR" ] || mkdir "$BIN_DIR"
+
+    # Terragrunt
     if [ ! -x "$TERRAGRUNT_EXE" ]; then 
       curl -L "$TERRAGRUNT_URL" > $BIN_DIR/$TERRAGRUNT_EXE 
       chmod +x "$BIN_DIR"/"$TERRAGRUNT_EXE"
     fi
+
   ;;
   *)
     echo "$1 is not a valid command"
