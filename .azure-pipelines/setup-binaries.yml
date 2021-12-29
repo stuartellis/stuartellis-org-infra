@@ -18,5 +18,5 @@ steps:
     workingDirectory: ${{ parameters.workingDirectory }}
   - bash: |
       ./do.sh info
-    displayName: Show details
+    displayName: Show details for setup
     workingDirectory: ${{ parameters.workingDirectory }}
