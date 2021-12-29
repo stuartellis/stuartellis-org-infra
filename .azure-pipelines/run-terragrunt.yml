@@ -12,11 +12,15 @@ parameters:
 
 steps:
   - task: AWSShellScript@1
-    displayName: Run Terragrunt
+    displayName: Run Terragrunt ${{ parameters.tgCommand }}
     inputs:
       awsCredentials: ${{ parameters.awsServiceConnection }}
       regionName: ${{ parameters.awsRegion }}
       scriptType: inline
-      inlineScript: ../../../../bin/terragrunt ${{ parameters.tgCommand }} --terragrunt-source ${{ parameters.tgSource }}
+      inlineScript: |
+        TF_IN_AUTOMATION=1
+        TF_INPUT=0
+        TERRAGRUNT_SOURCE=${{ parameters.tgSource }}
+        ../../../../bin/terragrunt ${{ parameters.tgCommand }}
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}
