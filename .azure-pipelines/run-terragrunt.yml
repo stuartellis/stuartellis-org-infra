@@ -5,6 +5,9 @@ parameters:
     type: string
   - name: tgCommand
     type: string
+  - name: tgOptions
+    type: string
+    default: ""
   - name: workingDirectory
     type: string
 
@@ -18,6 +21,6 @@ steps:
       inlineScript: |
         TF_IN_AUTOMATION=1
         TF_INPUT=0
-        ../../../../bin/terragrunt ${{ parameters.tgCommand }}
+        ../../../../bin/terragrunt run ${{ parameters.tgCommand }} ${{ parameters.tgOptions }}
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}

@@ -8,5 +8,5 @@ terraform {
 
 inputs = {
   full_topic_name = "stuartellis-origin-aaa-alerts"
-  short_topic_name = "sje-ogn-a"
+  short_topic_name = "sje-ogn"
 }

@@ -31,20 +31,37 @@ stages:
         steps:
           - checkout: self
           - checkout: stuartellis-org-tf-modules
+
           - template: .azure-pipelines/setup-binaries.yml
             parameters:
               cacheKeyFile: stuartellis-org-infra/package.json
               cacheName: bin
               workingDirectory: stuartellis-org-infra
+
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
-              tgCommand: run-all validate
+              tgCommand: validate
               workingDirectory: stuartellis-org-infra/tf/live/aws/stuartellis-origin
+
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
-              tgCommand: run-all plan
-              workingDirectory: stuartellis-org-infra/tf/live/aws/stuartellis-origin
+              tgCommand: plan
+              tgOptions: "-out $(Agent.TempDirectory)/tfplan"
+              workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+
+          - template: .azure-pipelines/run-terragrunt.yml
+            parameters:
+              awsRegion: eu-west-1
+              awsServiceConnection: sje-aws-origin
+              tgCommand: show
+              tgOptions: "-json $(Agent.TempDirectory)/tfplan > $(Agent.TempDirectory)/tf-plan.json"
+              workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: $(Agent.TempDirectory)
+              artifactName: tfplan-$(System.JobId)
