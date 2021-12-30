@@ -43,7 +43,7 @@ stages:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: validate
-              workingDirectory: stuartellis-org-infra/tf/live/aws/stuartellis-origin
+              workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
