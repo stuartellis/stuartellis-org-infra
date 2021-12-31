@@ -3,6 +3,8 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
+  - name: targetName
+    type: string
   - name: tgCommand
     type: string
   - name: tgExe
@@ -15,7 +17,7 @@ parameters:
 
 steps:
   - task: AWSShellScript@1
-    displayName: Run Terragrunt ${{ parameters.tgCommand }}
+    displayName: Run Terragrunt ${{ parameters.tgCommand }} for ${{ parameters.targetName }}
     inputs:
       awsCredentials: ${{ parameters.awsServiceConnection }}
       regionName: ${{ parameters.awsRegion }}

@@ -3,6 +3,8 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
+  - name: targetName
+    type: string
   - name: terraformOutputDir
     type: string
   - name: terraformSourceStackDir
@@ -15,6 +17,7 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      targetName: ${{ parameters.targetName }}
       tgCommand: apply
       tgOptions: "${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}

@@ -47,6 +47,7 @@ stages:
                         awsRegion: ${{ parameters.awsRegion }}
                         awsServiceConnection: ${{ parameters.awsServiceConnection }}
                         projectName: ${{ parameters.projectName }}
+                        targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
                         terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
                         terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
@@ -56,6 +57,7 @@ stages:
                           parameters:
                             awsRegion: ${{ parameters.awsRegion }}
                             awsServiceConnection: ${{ parameters.awsServiceConnection }}
+                            targetName: ${{ terraformStack.Key }}
                             terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
                             terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
                             terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt

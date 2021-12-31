@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: projectName
     type: string
+  - name: targetName
+    type: string
   - name: terraformOutputDir
     type: string
   - name: terraformSourceStackDir
@@ -26,6 +28,7 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      targetName: ${{ parameters.targetName }}
       tgCommand: validate
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
@@ -35,6 +38,7 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      targetName: ${{ parameters.targetName }}
       tgCommand: plan
       tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
@@ -45,6 +49,7 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      targetName: ${{ parameters.targetName }}
       tgCommand: show
       tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
       tgExe: ${{ parameters.terragruntExe }}
