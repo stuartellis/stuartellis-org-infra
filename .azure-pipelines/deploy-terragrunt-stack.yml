@@ -1,0 +1,74 @@
+parameters:
+  - name: awsRegion
+    type: string
+  - name: awsServiceConnection
+    type: string
+  - name: projectName
+    type: string
+  - name: terraformPlanDir
+    type: string
+  - name: terraformStackDir
+    type: string
+
+steps:
+  # Validate stack
+  - template: run-terragrunt-cmd.yml
+    parameters:
+      awsRegion: ${{ parameters.awsRegion }}
+      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tgCommand: validate
+      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      workingDirectory: ${{ parameters.terraformStackDir }}
+
+  # Create directory for Terraform plan, with package.json of parent project
+  - task: CopyFiles@2
+    displayName: Copy package.json
+    inputs:
+      sourceFolder: ${{ parameters.projectName }}
+      contents: package.json
+      targetFolder: ${{ parameters.terraformPlanDir }}
+
+  # Generate Terraform plan file for stack
+  - template: run-terragrunt-cmd.yml
+    parameters:
+      awsRegion: ${{ parameters.awsRegion }}
+      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tgCommand: plan
+      tgOptions: "-out ${{ parameters.terraformPlanDir }}/tfplan.out"
+      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      workingDirectory: ${{ parameters.terraformStackDir }}
+
+  # Export a JSON version of Terraform plan file
+  - template: run-terragrunt-cmd.yml
+    parameters:
+      awsRegion: ${{ parameters.awsRegion }}
+      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tgCommand: show
+      tgOptions: "-json ${{ parameters.terraformPlanDir }}/tfplan.out > ${{ parameters.terraformPlanDir }}/tfplan.json"
+      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      workingDirectory: ${{ parameters.terraformStackDir }}
+
+  # Create copy of files before use
+  - task: ArchiveFiles@2
+    displayName: Create ZIP for Terraform plan
+    inputs:
+      rootFolderOrFile: ${{ parameters.terraformPlanDir }}
+      includeRootFolder: false
+      archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
+
+  # Publish files before use
+  - task: PublishPipelineArtifact@1
+    displayName: Publish ZIP of Terraform plan
+    inputs:
+      targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
+      artifactName: tfplan-$(System.JobId)
+
+  # Apply Terraform plan file
+  - template: run-terragrunt-cmd.yml
+    parameters:
+      awsRegion: ${{ parameters.awsRegion }}
+      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tgCommand: apply
+      tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
+      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      workingDirectory: ${{ parameters.terraformStackDir }}

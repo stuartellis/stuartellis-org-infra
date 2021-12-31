@@ -43,57 +43,10 @@ stages:
               cacheName: binaries
               workingDirectory: ${{ variables.name }}
 
-          - template: .azure-pipelines/run-terragrunt-cmd.yml
+          - template: .azure-pipelines/deploy-terragrunt-stack.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
-              tgCommand: validate
-              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
-              workingDirectory: ${{ variables.terraformStack }}
-
-          - task: CopyFiles@2
-            displayName: Copy package.json
-            inputs:
-              sourceFolder: ${{ variables.name }}
-              contents: package.json
-              targetFolder: ${{ variables.terraformPlanDir }}
-
-          - template: .azure-pipelines/run-terragrunt-cmd.yml
-            parameters:
-              awsRegion: eu-west-1
-              awsServiceConnection: sje-aws-origin
-              tgCommand: plan
-              tgOptions: "-out ${{ variables.terraformPlanDir }}/tfplan.out"
-              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
-              workingDirectory: ${{ variables.terraformStack }}
-
-          - template: .azure-pipelines/run-terragrunt-cmd.yml
-            parameters:
-              awsRegion: eu-west-1
-              awsServiceConnection: sje-aws-origin
-              tgCommand: show
-              tgOptions: "-json ${{ variables.terraformPlanDir }}/tfplan.out > ${{ variables.terraformPlanDir }}/tfplan.json"
-              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
-              workingDirectory: ${{ variables.terraformStack }}
-
-          - task: ArchiveFiles@2
-            displayName: Create ZIP for Terraform plan
-            inputs:
-              rootFolderOrFile: ${{ variables.terraformPlanDir }}
-              includeRootFolder: false
-              archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
-
-          - task: PublishPipelineArtifact@1
-            displayName: Publish ZIP of Terraform plan
-            inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
-              artifactName: tfplan-$(System.JobId)
-
-          - template: .azure-pipelines/run-terragrunt-cmd.yml
-            parameters:
-              awsRegion: eu-west-1
-              awsServiceConnection: sje-aws-origin
-              tgCommand: apply
-              tgOptions: "${{ variables.terraformPlanDir }}/tfplan.out"
-              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
-              workingDirectory: ${{ variables.terraformStack }}
+              projectName: ${{ variables.name }}
+              terraformPlanDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
+              terraformStackDir: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
