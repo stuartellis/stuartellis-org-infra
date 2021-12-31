@@ -55,5 +55,5 @@ stages:
                     dryRun: ${{ variables.dryRun }}
                     projectName: ${{ variables.name }}
                     terraformPlanDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
-                    terraformStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/${{ Environment.Name }}/us-east-1/shared/notifications
+                    terraformStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                     terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
