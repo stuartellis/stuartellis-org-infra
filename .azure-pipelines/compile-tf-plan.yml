@@ -3,9 +3,13 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
+  - name: tfLogLevel
+    type: string
+  - name: tfLogPath
+    type: string
   - name: projectName
     type: string
-  - name: terraformPlanDir
+  - name: terraformOutputDir
     type: string
   - name: terraformSourceStackDir
     type: string
@@ -18,6 +22,8 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tfLogLevel: ${{ parameters.tfLogLevel }}
+      tfLogPath: ${{ parameters.tfLogPath }}/tf-validate.log
       tgCommand: validate
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
@@ -28,15 +34,17 @@ steps:
     inputs:
       sourceFolder: ${{ parameters.projectName }}
       contents: package.json
-      targetFolder: ${{ parameters.terraformPlanDir }}
+      targetFolder: ${{ parameters.terraformOutputDir }}
 
   # Generate Terraform plan file for stack
   - template: run-terragrunt-cmd.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tfLogLevel: ${{ parameters.tfLogLevel }}
+      tfLogPath: ${{ parameters.tfLogPath }}/tf-plan.log
       tgCommand: plan
-      tgOptions: "-out ${{ parameters.terraformPlanDir }}/tfplan.out"
+      tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
@@ -45,22 +53,9 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tfLogLevel: ${{ parameters.tfLogLevel }}
+      tfLogPath: ${{ parameters.tfLogPath }}/tf-show.log
       tgCommand: show
-      tgOptions: "-json ${{ parameters.terraformPlanDir }}/tfplan.out > ${{ parameters.terraformPlanDir }}/tfplan.json"
+      tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
-
-  # Create copy of files before use
-  - task: ArchiveFiles@2
-    displayName: Create ZIP for Terraform plan
-    inputs:
-      rootFolderOrFile: ${{ parameters.terraformPlanDir }}
-      includeRootFolder: false
-      archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
-
-  # Publish files before use
-  - task: PublishPipelineArtifact@1
-    displayName: Publish ZIP of Terraform plan
-    inputs:
-      targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
-      artifactName: tfplan-$(System.JobId)

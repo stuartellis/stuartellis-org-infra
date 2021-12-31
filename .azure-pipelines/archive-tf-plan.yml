@@ -1,0 +1,19 @@
+parameters:
+  - name: terraformOutputDir
+    type: string
+
+steps:
+  - task: ArchiveFiles@2
+    displayName: Create ZIP for Terraform run
+    condition: succeededOrFailed()
+    inputs:
+      rootFolderOrFile: ${{ parameters.terraformOutputDir }}
+      includeRootFolder: false
+      archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish ZIP of Terraform run
+    condition: succeededOrFailed()
+    inputs:
+      targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
+      artifactName: tfplan-$(System.JobId)

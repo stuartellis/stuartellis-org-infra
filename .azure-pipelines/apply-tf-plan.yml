@@ -5,7 +5,11 @@ parameters:
     type: string
   - name: projectName
     type: string
-  - name: terraformPlanDir
+  - name: tfLogLevel
+    type: string
+  - name: tfLogPath
+    type: string
+  - name: terraformOutputDir
     type: string
   - name: terraformSourceStackDir
     type: string
@@ -17,7 +21,9 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tfLogLevel: ${{ parameters.tfLogLevel }}
+      tfLogPath: ${{ parameters.tfLogPath }}/tf-apply.log
       tgCommand: apply
-      tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
+      tgOptions: "${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
