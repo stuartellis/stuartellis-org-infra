@@ -45,7 +45,7 @@ stages:
                 - template: .azure-pipelines/setup-binaries.yml
                   parameters:
                     cacheKeyFile: ${{ variables.name }}/package.json
-                    cacheName: binaries
+                    cacheName: ${{ variables.name }}-binaries
                     workingDirectory: ${{ variables.name }}
 
                 - template: .azure-pipelines/deploy-terragrunt-stack.yml
