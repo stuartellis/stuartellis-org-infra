@@ -89,11 +89,11 @@ stages:
               targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
               artifactName: tfplan-$(System.JobId)
 
-          # - template: .azure-pipelines/run-terragrunt-cmd.yml
-          #   parameters:
-          #     awsRegion: eu-west-1
-          #     awsServiceConnection: sje-aws-origin
-          #     tgCommand: apply
-          #     tgOptions: "${{ variables.terraformPlanDir }}/tfplan.out"
-          #     tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
-          #     workingDirectory: ${{ variables.terraformStack }}
+          - template: .azure-pipelines/run-terragrunt-cmd.yml
+            parameters:
+              awsRegion: eu-west-1
+              awsServiceConnection: sje-aws-origin
+              tgCommand: apply
+              tgOptions: "${{ variables.terraformPlanDir }}/tfplan.out"
+              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
+              workingDirectory: ${{ variables.terraformStack }}
