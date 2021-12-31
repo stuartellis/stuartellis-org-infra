@@ -65,6 +65,9 @@ stages:
               workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - task: PublishPipelineArtifact@1
+            displayName: Publish Terraform plan
             inputs:
               targetPath: $(Agent.TempDirectory)
               artifactName: tfplan-$(System.JobId)
+
+          # FIXME: Apply plan
