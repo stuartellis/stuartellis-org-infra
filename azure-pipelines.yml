@@ -44,7 +44,7 @@ stages:
               awsServiceConnection: sje-aws-origin
               tgCommand: validate
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
-              workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+              workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
@@ -53,16 +53,16 @@ stages:
               tgCommand: plan
               tgOptions: "-out $(Agent.TempDirectory)/tfplan"
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
-              workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+              workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: show
-              tgOptions: "-json $(Agent.TempDirectory)/tfplan > $(Agent.TempDirectory)/tf-plan.json"
+              tgOptions: "-json $(Agent.TempDirectory)/tfplan > $(Agent.TempDirectory)/tfplan.json"
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
-              workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+              workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - task: PublishPipelineArtifact@1
             inputs:
