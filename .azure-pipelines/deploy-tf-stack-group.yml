@@ -39,7 +39,7 @@ stages:
                   parameters:
                     workingDirectory: ${{ variables.name }}
 
-                - ${{ each stack in terraformStacks }}:
+                - ${{ each stack in parameters.terraformStacks }}:
                     - template: deploy-tf-stack.yml
                       parameters:
                         awsRegion: ${{ parameters.awsRegion }}
