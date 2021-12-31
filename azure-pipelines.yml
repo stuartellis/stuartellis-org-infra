@@ -48,7 +48,6 @@ stages:
                     awsRegion: eu-west-1
                     awsServiceConnection: sje-aws-origin
                     projectName: ${{ variables.name }}
-                    tfLogLevel: ${{ variables.tfLogLevel }}
                     terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                     terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                     terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
@@ -59,7 +58,6 @@ stages:
                         awsRegion: eu-west-1
                         awsServiceConnection: sje-aws-origin
                         projectName: ${{ variables.name }}
-                        tfLogLevel: ${{ variables.tfLogLevel }}
                         terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                         terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                         terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt

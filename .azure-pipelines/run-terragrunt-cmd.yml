@@ -7,10 +7,6 @@ parameters:
     type: string
   - name: tgExe
     type: string
-  - name: tfLogLevel
-    type: string
-  - name: tfLogPath
-    type: string
   - name: tgOptions
     type: string
     default: ""
@@ -27,13 +23,6 @@ steps:
       inlineScript: |
         TF_IN_AUTOMATION=1
         TF_INPUT=0
-        TF_LOG=${{ parameters.tfLogLevel }}
-        TF_LOG_PATH=${{ parameters.tfLogPath }}
         ${{ parameters.tgExe }} ${{ parameters.tgCommand }} ${{ parameters.tgOptions }}
-        echo "Log Level: $TF_LOG"
-        echo "Log Path: $TF_LOG_PATH"
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}
-  - bash: |
-      ls -alh ${{ parameters.workingDirectory }}
-    displayName: Working Files

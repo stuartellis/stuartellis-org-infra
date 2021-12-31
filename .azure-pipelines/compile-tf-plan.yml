@@ -3,8 +3,6 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
-  - name: tfLogLevel
-    type: string
   - name: projectName
     type: string
   - name: terraformOutputDir
@@ -28,8 +26,6 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
-      tfLogLevel: ${{ parameters.tfLogLevel }}
-      tfLogPath: ${{ parameters.terraformOutputDir }}/tf-validate.log
       tgCommand: validate
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
@@ -39,8 +35,6 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
-      tfLogLevel: ${{ parameters.tfLogLevel }}
-      tfLogPath: ${{ parameters.terraformOutputDir }}/tf-plan.log
       tgCommand: plan
       tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
@@ -51,8 +45,6 @@ steps:
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
-      tfLogLevel: ${{ parameters.tfLogLevel }}
-      tfLogPath: ${{ parameters.terraformOutputDir }}/tf-show.log
       tgCommand: show
       tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
       tgExe: ${{ parameters.terragruntExe }}
