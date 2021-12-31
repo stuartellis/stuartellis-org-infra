@@ -1,6 +1,6 @@
 # stuartellis-org-infra
 
-Automation for stuartellis.org environments.
+Automation for cloud environments.
 
 This uses [Terraform](https://www.terraform.io/) and [Terragrunt](https://terragrunt.gruntwork.io).
 
@@ -14,7 +14,7 @@ In the managed accounts, use CloudFormation to deploy an IAM role for Terraform:
 
 ## Usage
 
-To apply the Terraform code for a region in an environment:
+To apply all of the Terraform code for a region in an environment:
 
     cd tf/live/aws/stuartellis-np/aaa/us-east-1
     terragrunt run-all plan --terragrunt-source-update

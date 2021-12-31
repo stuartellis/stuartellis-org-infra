@@ -1,7 +1,7 @@
 variables:
   - template: .azure-pipelines/variables.yml
   - name: terraformStack
-    value: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+    value: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
@@ -30,53 +30,56 @@ stages:
         displayName: Run Terragrunt
         pool:
           vmImage: ${{variables.vmImage}}
+        variables:
+          - name: terraformPlanDir
+            value: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
         steps:
           - checkout: self
           - checkout: stuartellis-org-tf-modules
 
           - template: .azure-pipelines/setup-binaries.yml
             parameters:
-              cacheKeyFile: stuartellis-org-infra/package.json
+              cacheKeyFile: ${{ variables.name }}/package.json
               cacheName: binaries
-              workingDirectory: stuartellis-org-infra
+              workingDirectory: ${{ variables.name }}
 
-          - template: .azure-pipelines/run-terragrunt.yml
+          - template: .azure-pipelines/run-terragrunt-cmd.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: validate
-              tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
+              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
               workingDirectory: ${{ variables.terraformStack }}
 
-          - template: .azure-pipelines/run-terragrunt.yml
+          - task: CopyFiles@2
+            displayName: Copy package.json
+            inputs:
+              sourceFolder: ${{ variables.name }}
+              contents: package.json
+              targetFolder: ${{ variables.terraformPlanDir }}
+
+          - template: .azure-pipelines/run-terragrunt-cmd.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: plan
-              tgOptions: "-out $(Agent.TempDirectory)/tfplan.out"
-              tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
+              tgOptions: "-out ${{ variables.terraformPlanDir }}/tfplan.out"
+              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
               workingDirectory: ${{ variables.terraformStack }}
 
-          - template: .azure-pipelines/run-terragrunt.yml
+          - template: .azure-pipelines/run-terragrunt-cmd.yml
             parameters:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: show
-              tgOptions: "-json $(Agent.TempDirectory)/tfplan.out > $(Agent.TempDirectory)/tfplan.json"
-              tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
+              tgOptions: "-json ${{ variables.terraformPlanDir }}/tfplan.out > ${{ variables.terraformPlanDir }}/tfplan.json"
+              tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
               workingDirectory: ${{ variables.terraformStack }}
-
-          - task: CopyFiles@2
-            displayName: Copy Terraform plan
-            inputs:
-              sourceFolder: $(Agent.TempDirectory)
-              contents: tfplan.*
-              targetFolder: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
 
           - task: ArchiveFiles@2
             displayName: Create ZIP for Terraform plan
             inputs:
-              rootFolderOrFile: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
+              rootFolderOrFile: ${{ variables.terraformPlanDir }}
               includeRootFolder: false
               archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
 
@@ -86,11 +89,11 @@ stages:
               targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
               artifactName: tfplan-$(System.JobId)
 
-          # - template: .azure-pipelines/run-terragrunt.yml
+          # - template: .azure-pipelines/run-terragrunt-cmd.yml
           #   parameters:
           #     awsRegion: eu-west-1
           #     awsServiceConnection: sje-aws-origin
           #     tgCommand: apply
-          #     tgOptions: "$(Agent.TempDirectory)/tfplan.out"
-          #     tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
+          #     tgOptions: "${{ variables.terraformPlanDir }}/tfplan.out"
+          #     tgExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
           #     workingDirectory: ${{ variables.terraformStack }}
