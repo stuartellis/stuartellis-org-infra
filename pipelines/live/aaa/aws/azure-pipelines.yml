@@ -39,7 +39,7 @@ stages:
           # FIXME: Add code tests!
 
   # Stacks for AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/deploy-tf-stack-group-aws.yml
+  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
     parameters:
       environment: dev
       providerName: aws
