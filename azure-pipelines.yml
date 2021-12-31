@@ -21,8 +21,26 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  - stage: run
-    displayName: Run
+  - stage: testTerraformCode
+    displayName: Test Terraform Code
+    jobs:
+      - job: runTerragrunt
+        displayName: Run Terragrunt
+        pool:
+          vmImage: ${{variables.vmImage}}
+        steps:
+          - checkout: self
+          - checkout: stuartellis-org-tf-modules
+
+          - template: .azure-pipelines/setup-binaries.yml
+            parameters:
+              workingDirectory: ${{ variables.name }}
+
+          # FIXME: Add code tests!
+
+  - stage: runTerraform
+    displayName: Run Terraform
+    dependsOn: testTerraformCode
     jobs:
       - deployment: runTerragrunt
         displayName: Run Terragrunt
@@ -31,7 +49,7 @@ stages:
         environment: aaa
         variables:
           - name: terraformOutputDir
-            value: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
+            value: $(Agent.TempDirectory)/tf-run-$(Build.BuildId)
         strategy:
           runOnce:
             deploy:
@@ -48,7 +66,7 @@ stages:
                     awsRegion: eu-west-1
                     awsServiceConnection: sje-aws-origin
                     projectName: ${{ variables.name }}
-                    terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
+                    terraformOutputDir: $(Agent.TempDirectory)/tf-run-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                     terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                     terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
 
@@ -58,10 +76,10 @@ stages:
                         awsRegion: eu-west-1
                         awsServiceConnection: sje-aws-origin
                         projectName: ${{ variables.name }}
-                        terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
+                        terraformOutputDir: $(Agent.TempDirectory)/tf-run-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                         terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                         terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
 
-                - template: .azure-pipelines/archive-tf-plan.yml
+                - template: .azure-pipelines/archive-tf-outputs.yml
                   parameters:
-                    terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
+                    terraformOutputDir: $(Agent.TempDirectory)/tf-run-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
