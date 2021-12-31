@@ -54,9 +54,9 @@ case $1 in
     specify_arch
     specify_os
     specify_download_urls
-    echo "CPU arch: $ARCH"
-    echo "Operating system: $OS"
+    echo "Expected CPU type: $ARCH"
     echo "Expected Terragrunt version: $TERRAGRUNT_VERSION"
+    echo "Detected Operating system: $OS"
     echo "Terragrunt download URL: $TERRAGRUNT_URL" 
     ./"$BIN_DIR"/"$TERRAGRUNT_EXE" --version
   ;;
