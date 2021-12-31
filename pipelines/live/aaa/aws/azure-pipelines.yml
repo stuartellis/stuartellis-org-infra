@@ -51,4 +51,4 @@ stages:
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks:
-        - "notifications": "notifications"
+        notifications: notifications

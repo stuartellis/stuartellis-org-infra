@@ -41,14 +41,14 @@ stages:
                   parameters:
                     workingDirectory: ${{ parameters.projectName }}
 
-                - ${{ each stack in parameters.terraformStacks }}:
+                - ${{ each terraformStack in parameters.terraformStacks }}:
                     - template: compile-tf-plan-aws.yml
                       parameters:
                         awsRegion: ${{ parameters.awsRegion }}
                         awsServiceConnection: ${{ parameters.awsServiceConnection }}
                         projectName: ${{ parameters.projectName }}
-                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
-                        terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
+                        terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
                         terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                     - ${{ if eq(parameters.dryRun, false) }}:
