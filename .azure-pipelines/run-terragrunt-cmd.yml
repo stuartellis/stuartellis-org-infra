@@ -30,5 +30,7 @@ steps:
         TF_LOG=${{ parameters.tfLogLevel }}
         TF_LOG_PATH=${{ parameters.tfLogPath }}
         ${{ parameters.tgExe }} ${{ parameters.tgCommand }} ${{ parameters.tgOptions }}
+        echo "Log Level: $TF_LOG"
+        echo "Log Path: $TF_LOG_PATH"
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}
