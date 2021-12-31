@@ -22,7 +22,7 @@ parameters:
 
 stages:
   - stage:
-    displayName: Run Terraform
+    displayName: Run Terraform for ${{ parameters.environment }}
     dependsOn: testTerraformCode
     jobs:
       - deployment: runTerragrunt
