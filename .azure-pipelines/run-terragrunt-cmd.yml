@@ -34,3 +34,6 @@ steps:
         echo "Log Path: $TF_LOG_PATH"
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}
+  - bash: |
+      ls -alh ${{ parameters.workingDirectory }}
+    displayName: Working Files

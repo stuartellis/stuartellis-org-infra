@@ -3,17 +3,21 @@ parameters:
     type: string
 
 steps:
+  - bash: |
+      ls -alh ${{ parameters.terraformOutputDir }}
+    displayName: Outputs
+
   - task: ArchiveFiles@2
     displayName: Create ZIP for Terraform run
     condition: succeededOrFailed()
     inputs:
       rootFolderOrFile: ${{ parameters.terraformOutputDir }}
       includeRootFolder: false
-      archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/terraform-$(Build.BuildId).zip
 
   - task: PublishPipelineArtifact@1
     displayName: Publish ZIP of Terraform run
     condition: succeededOrFailed()
     inputs:
-      targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
-      artifactName: tfplan-$(System.JobId)
+      targetPath: $(Build.ArtifactStagingDirectory)/terraform-$(Build.BuildId).zip
+      artifactName: terraform-$(System.JobId)
