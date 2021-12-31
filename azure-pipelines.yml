@@ -53,7 +53,7 @@ stages:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: plan
-              tgOptions: "-out $(Agent.TempDirectory)/tfplan"
+              tgOptions: "-out $(Agent.TempDirectory)/tfplan.out"
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
               workingDirectory: ${{ variables.terraformStack }}
 
