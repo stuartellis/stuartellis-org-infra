@@ -3,7 +3,9 @@
 
 ## Temporary files
 bin
+tmp
 .DS_Store
+lint-results.xml
 
 # Local .terraform directories
 **/.terraform/*
