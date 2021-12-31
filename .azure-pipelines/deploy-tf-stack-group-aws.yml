@@ -39,7 +39,7 @@ stages:
 
                 - template: setup-binaries.yml
                   parameters:
-                    workingDirectory: ${{ variables.name }}
+                    workingDirectory: ${{ parameters.projectName }}
 
                 - ${{ each stack in parameters.terraformStacks }}:
                     - template: compile-tf-plan-aws.yml
