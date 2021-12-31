@@ -63,4 +63,4 @@ stages:
                 - template: archive-outputs.yml
                   parameters:
                     prefix: ${{ parameters.runIdentifier }}
-                    outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}
+                    rootDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}

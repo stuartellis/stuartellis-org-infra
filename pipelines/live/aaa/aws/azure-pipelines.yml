@@ -47,7 +47,7 @@ stages:
       dryRun: ${{ variables.dryRun }}
       projectName: ${{ variables.name }}
       runIdentifier: tf-live-aws-stuartellis-origin-aaa-us-east-1-shared-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks:
