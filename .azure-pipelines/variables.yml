@@ -2,6 +2,6 @@ variables:
   - name: name
     value: stuartellis-org-infra
   - name: dryRun
-    value: "true"
+    value: true
   - name: vmImage
     value: ubuntu-20.04

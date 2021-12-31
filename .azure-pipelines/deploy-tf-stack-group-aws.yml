@@ -62,5 +62,5 @@ stages:
 
                 - template: archive-outputs.yml
                   parameters:
-                    prefix: ${{ parameters.runIdentifier }}
+                    archiveName: ${{ parameters.runIdentifier }}
                     rootDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}

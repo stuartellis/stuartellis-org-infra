@@ -1,5 +1,5 @@
 parameters:
-  - name: prefix
+  - name: archiveName
     type: string
   - name: rootDir
     type: string
@@ -11,11 +11,11 @@ steps:
     inputs:
       rootFolderOrFile: ${{ parameters.rootDir }}
       includeRootFolder: false
-      archiveFile: $(Build.ArtifactStagingDirectory)/${{ parameters.prefix }}-$(Build.BuildId).zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}.zip
 
   - task: PublishPipelineArtifact@1
     displayName: Publish ZIP
     condition: succeededOrFailed()
     inputs:
-      targetPath: $(Build.ArtifactStagingDirectory)/${{ parameters.prefix }}-$(Build.BuildId).zip
+      targetPath: $(Build.ArtifactStagingDirectory)/${{ parameters.archiveName }}.zip
       artifactName: terraform-$(System.JobId)
