@@ -2,7 +2,7 @@ variables:
   - template: .azure-pipelines/variables.yml
 
   - name: dryRun
-    value: "true"
+    value: "false"
 
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
