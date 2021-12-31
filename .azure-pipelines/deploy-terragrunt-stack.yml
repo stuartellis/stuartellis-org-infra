@@ -3,6 +3,9 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
+  - name: dryRun
+    type: boolean
+    default: true
   - name: projectName
     type: string
   - name: terraformPlanDir
@@ -13,7 +16,7 @@ parameters:
     type: string
 
 steps:
-  # Validate stack
+  # Validate configuration for stack
   - template: run-terragrunt-cmd.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
@@ -65,12 +68,13 @@ steps:
       targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
       artifactName: tfplan-$(System.JobId)
 
-  # Apply Terraform plan file
-  - template: run-terragrunt-cmd.yml
-    parameters:
-      awsRegion: ${{ parameters.awsRegion }}
-      awsServiceConnection: ${{ parameters.awsServiceConnection }}
-      tgCommand: apply
-      tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
-      tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformStackDir }}
+  - ${{ if eq(parameters.dryRun, false) }}:
+      # Apply Terraform plan file
+      - template: run-terragrunt-cmd.yml
+        parameters:
+          awsRegion: ${{ parameters.awsRegion }}
+          awsServiceConnection: ${{ parameters.awsServiceConnection }}
+          tgCommand: apply
+          tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
+          tgExe: ${{ parameters.terragruntExe }}
+          workingDirectory: ${{ parameters.terraformStackDir }}
