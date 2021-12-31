@@ -9,6 +9,8 @@ parameters:
     type: string
   - name: terraformStackDir
     type: string
+  - name: terragruntExe
+    type: string
 
 steps:
   # Validate stack
@@ -17,7 +19,7 @@ steps:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tgCommand: validate
-      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformStackDir }}
 
   # Create directory for Terraform plan, with package.json of parent project
@@ -35,7 +37,7 @@ steps:
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tgCommand: plan
       tgOptions: "-out ${{ parameters.terraformPlanDir }}/tfplan.out"
-      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformStackDir }}
 
   # Export a JSON version of Terraform plan file
@@ -45,7 +47,7 @@ steps:
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tgCommand: show
       tgOptions: "-json ${{ parameters.terraformPlanDir }}/tfplan.out > ${{ parameters.terraformPlanDir }}/tfplan.json"
-      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformStackDir }}
 
   # Create copy of files before use
@@ -70,5 +72,5 @@ steps:
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tgCommand: apply
       tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
-      tgExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+      tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformStackDir }}
