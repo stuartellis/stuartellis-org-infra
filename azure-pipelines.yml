@@ -35,7 +35,7 @@ stages:
           - template: .azure-pipelines/setup-binaries.yml
             parameters:
               cacheKeyFile: stuartellis-org-infra/package.json
-              cacheName: bin
+              cacheName: binaries
               workingDirectory: stuartellis-org-infra
 
           - template: .azure-pipelines/run-terragrunt.yml
@@ -43,7 +43,7 @@ stages:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: validate
-              tgExe: $(Pipeline.Workspace)/stuartellis-org-infra/bin/terragrunt
+              tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
               workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - template: .azure-pipelines/run-terragrunt.yml
@@ -52,7 +52,7 @@ stages:
               awsServiceConnection: sje-aws-origin
               tgCommand: plan
               tgOptions: "-out $(Agent.TempDirectory)/tfplan"
-              tgExe: $(Pipeline.Workspace)/stuartellis-org-infra/bin/terragrunt
+              tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
               workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - template: .azure-pipelines/run-terragrunt.yml
@@ -61,7 +61,7 @@ stages:
               awsServiceConnection: sje-aws-origin
               tgCommand: show
               tgOptions: "-json $(Agent.TempDirectory)/tfplan > $(Agent.TempDirectory)/tf-plan.json"
-              tgExe: $(Pipeline.Workspace)/stuartellis-org-infra/bin/terragrunt
+              tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
               workingDirectory: tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
           - task: PublishPipelineArtifact@1
