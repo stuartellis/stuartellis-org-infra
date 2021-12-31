@@ -1,17 +1,8 @@
 parameters:
-  - name: cacheKeyFile
-    type: string
-  - name: cacheName
-    type: string
   - name: workingDirectory
     type: string
 
 steps:
-  - task: Cache@2
-    inputs:
-      key: ${{ parameters.cacheName }} | "$(Agent.OS)" | ${{ parameters.cacheKeyFile }}
-      path: ${{ parameters.workingDirectory }}/bin
-    displayName: Use cache for binaries
   - bash: |
       ./do.sh setup
     displayName: Run setup
