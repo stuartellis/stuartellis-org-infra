@@ -3,14 +3,11 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
-  - name: dryRun
-    type: boolean
-    default: true
   - name: projectName
     type: string
   - name: terraformPlanDir
     type: string
-  - name: terraformStackDir
+  - name: terraformSourceStackDir
     type: string
   - name: terragruntExe
     type: string
@@ -23,7 +20,7 @@ steps:
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tgCommand: validate
       tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformStackDir }}
+      workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Create directory for Terraform plan, with package.json of parent project
   - task: CopyFiles@2
@@ -41,7 +38,7 @@ steps:
       tgCommand: plan
       tgOptions: "-out ${{ parameters.terraformPlanDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformStackDir }}
+      workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Export a JSON version of Terraform plan file
   - template: run-terragrunt-cmd.yml
@@ -51,7 +48,7 @@ steps:
       tgCommand: show
       tgOptions: "-json ${{ parameters.terraformPlanDir }}/tfplan.out > ${{ parameters.terraformPlanDir }}/tfplan.json"
       tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformStackDir }}
+      workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Create copy of files before use
   - task: ArchiveFiles@2
@@ -67,14 +64,3 @@ steps:
     inputs:
       targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
       artifactName: tfplan-$(System.JobId)
-
-  - ${{ if eq(parameters.dryRun, false) }}:
-      # Apply Terraform plan file
-      - template: run-terragrunt-cmd.yml
-        parameters:
-          awsRegion: ${{ parameters.awsRegion }}
-          awsServiceConnection: ${{ parameters.awsServiceConnection }}
-          tgCommand: apply
-          tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
-          tgExe: ${{ parameters.terragruntExe }}
-          workingDirectory: ${{ parameters.terraformStackDir }}

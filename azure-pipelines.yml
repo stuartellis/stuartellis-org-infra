@@ -46,12 +46,21 @@ stages:
                   parameters:
                     workingDirectory: ${{ variables.name }}
 
-                - template: .azure-pipelines/deploy-terragrunt-stack.yml
+                - template: .azure-pipelines/compile-tf-plan.yml
                   parameters:
                     awsRegion: eu-west-1
                     awsServiceConnection: sje-aws-origin
-                    dryRun: ${{ variables.dryRun }}
                     projectName: ${{ variables.name }}
                     terraformPlanDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
-                    terraformStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
+                    terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                     terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
+
+                - ${{ if eq(variables.dryRun, false) }}:
+                    - template: .azure-pipelines/deploy-tf-plan.yml
+                      parameters:
+                        awsRegion: eu-west-1
+                        awsServiceConnection: sje-aws-origin
+                        projectName: ${{ variables.name }}
+                        terraformPlanDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
+                        terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
+                        terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt

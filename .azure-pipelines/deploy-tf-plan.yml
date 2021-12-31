@@ -1,0 +1,23 @@
+parameters:
+  - name: awsRegion
+    type: string
+  - name: awsServiceConnection
+    type: string
+  - name: projectName
+    type: string
+  - name: terraformPlanDir
+    type: string
+  - name: terraformSourceStackDir
+    type: string
+  - name: terragruntExe
+    type: string
+
+steps:
+  - template: run-terragrunt-cmd.yml
+    parameters:
+      awsRegion: ${{ parameters.awsRegion }}
+      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tgCommand: apply
+      tgOptions: "${{ parameters.terraformPlanDir }}/tfplan.out"
+      tgExe: ${{ parameters.terragruntExe }}
+      workingDirectory: ${{ parameters.terraformSourceStackDir }}
