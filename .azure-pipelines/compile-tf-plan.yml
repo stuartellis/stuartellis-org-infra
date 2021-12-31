@@ -5,8 +5,6 @@ parameters:
     type: string
   - name: tfLogLevel
     type: string
-  - name: tfLogPath
-    type: string
   - name: projectName
     type: string
   - name: terraformOutputDir
@@ -17,17 +15,6 @@ parameters:
     type: string
 
 steps:
-  # Validate configuration for stack
-  - template: run-terragrunt-cmd.yml
-    parameters:
-      awsRegion: ${{ parameters.awsRegion }}
-      awsServiceConnection: ${{ parameters.awsServiceConnection }}
-      tfLogLevel: ${{ parameters.tfLogLevel }}
-      tfLogPath: ${{ parameters.tfLogPath }}/tf-validate.log
-      tgCommand: validate
-      tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformSourceStackDir }}
-
   # Create directory for Terraform plan, with package.json of parent project
   - task: CopyFiles@2
     displayName: Copy package.json
@@ -36,13 +23,24 @@ steps:
       contents: package.json
       targetFolder: ${{ parameters.terraformOutputDir }}
 
+  # Validate configuration for stack
+  - template: run-terragrunt-cmd.yml
+    parameters:
+      awsRegion: ${{ parameters.awsRegion }}
+      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      tfLogLevel: ${{ parameters.tfLogLevel }}
+      tfLogPath: ${{ parameters.terraformOutputDir }}/tf-validate.log
+      tgCommand: validate
+      tgExe: ${{ parameters.terragruntExe }}
+      workingDirectory: ${{ parameters.terraformSourceStackDir }}
+
   # Generate Terraform plan file for stack
   - template: run-terragrunt-cmd.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tfLogLevel: ${{ parameters.tfLogLevel }}
-      tfLogPath: ${{ parameters.tfLogPath }}/tf-plan.log
+      tfLogPath: ${{ parameters.terraformOutputDir }}/tf-plan.log
       tgCommand: plan
       tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
@@ -54,7 +52,7 @@ steps:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
       tfLogLevel: ${{ parameters.tfLogLevel }}
-      tfLogPath: ${{ parameters.tfLogPath }}/tf-show.log
+      tfLogPath: ${{ parameters.terraformOutputDir }}/tf-show.log
       tgCommand: show
       tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
       tgExe: ${{ parameters.terragruntExe }}

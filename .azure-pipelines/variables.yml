@@ -1,6 +1,8 @@
 variables:
   - name: name
     value: stuartellis-org-infra
+  - name: dryRun
+    value: "true"
   - name: tfLogLevel
     value: INFO
   - name: vmImage

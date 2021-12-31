@@ -1,9 +1,6 @@
 variables:
   - template: .azure-pipelines/variables.yml
 
-  - name: dryRun
-    value: "false"
-
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
@@ -52,7 +49,6 @@ stages:
                     awsServiceConnection: sje-aws-origin
                     projectName: ${{ variables.name }}
                     tfLogLevel: ${{ variables.tfLogLevel }}
-                    tfLogPath: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                     terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                     terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                     terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
@@ -64,7 +60,6 @@ stages:
                         awsServiceConnection: sje-aws-origin
                         projectName: ${{ variables.name }}
                         tfLogLevel: ${{ variables.tfLogLevel }}
-                        tfLogPath: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                         terraformOutputDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                         terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
                         terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
