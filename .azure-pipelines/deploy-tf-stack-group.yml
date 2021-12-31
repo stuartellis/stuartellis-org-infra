@@ -7,7 +7,7 @@ parameters:
     type: string
   - name: projectName
     type: string
-  - name: outputPath
+  - name: runIdentifier
     type: string
   - name: stackGroupPath
     type: string
