@@ -9,6 +9,8 @@ parameters:
     type: string
   - name: projectName
     type: string
+  - name: providerName
+    type: string
   - name: runIdentifier
     type: string
   - name: stackGroupPath
@@ -42,9 +44,10 @@ stages:
                     workingDirectory: ${{ parameters.projectName }}
 
                 - ${{ each terraformStack in parameters.terraformStacks }}:
-                    - template: compile-tf-plan-aws.yml
+                    - template: compile-tf-plan.yml
                       parameters:
                         cloudRegion: ${{ parameters.cloudRegion }}
+                        providerName: ${{ parameters.providerName }}
                         providerServiceConnection: ${{ parameters.providerServiceConnection }}
                         projectName: ${{ parameters.projectName }}
                         targetName: ${{ terraformStack.Key }}
@@ -56,6 +59,7 @@ stages:
                         - template: apply-tf-plan-aws.yml
                           parameters:
                             cloudRegion: ${{ parameters.cloudRegion }}
+                            providerName: ${{ parameters.providerName }}
                             providerServiceConnection: ${{ parameters.providerServiceConnection }}
                             targetName: ${{ terraformStack.Key }}
                             terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}

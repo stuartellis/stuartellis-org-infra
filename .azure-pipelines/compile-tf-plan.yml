@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: projectName
     type: string
+  - name: providerName
+    type: string
   - name: targetName
     type: string
   - name: terraformOutputDir
@@ -24,7 +26,7 @@ steps:
       targetFolder: ${{ parameters.terraformOutputDir }}
 
   # Validate configuration for stack
-  - template: run-terragrunt-cmd-aws.yml
+  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
@@ -34,7 +36,7 @@ steps:
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Generate Terraform plan file for stack
-  - template: run-terragrunt-cmd-aws.yml
+  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
@@ -45,7 +47,7 @@ steps:
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Export a JSON version of Terraform plan file
-  - template: run-terragrunt-cmd-aws.yml
+  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}

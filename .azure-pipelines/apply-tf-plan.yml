@@ -1,6 +1,8 @@
 parameters:
   - name: cloudRegion
     type: string
+  - name: providerName
+    type: string
   - name: providerServiceConnection
     type: string
   - name: targetName
@@ -13,7 +15,7 @@ parameters:
     type: string
 
 steps:
-  - template: run-terragrunt-cmd-aws.yml
+  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
