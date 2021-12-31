@@ -5,7 +5,7 @@ variables:
     value: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
   - name: dryRun
-    value: "true"
+    value: "false"
 
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
