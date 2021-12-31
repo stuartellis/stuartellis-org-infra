@@ -62,22 +62,22 @@ stages:
               awsRegion: eu-west-1
               awsServiceConnection: sje-aws-origin
               tgCommand: show
-              tgOptions: "-json $(Agent.TempDirectory)/tfplan > $(Agent.TempDirectory)/tfplan.json"
+              tgOptions: "-json $(Agent.TempDirectory)/tfplan.out > $(Agent.TempDirectory)/tfplan.json"
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
               workingDirectory: ${{ variables.terraformStack }}
 
           - task: CopyFiles@2
             displayName: Copy Terraform plan
             inputs:
-              sourceFolder: ${{ variables.terraformStack }}
-              contents: tfplan* 
+              sourceFolder: $(Agent.TempDirectory)
+              contents: tfplan.*
               targetFolder: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
 
           - task: ArchiveFiles@2
             displayName: Create ZIP for Terraform plan
             inputs:
-              rootFolderOrFile: $(Agent.TempDirectory)/tfplan-$(Build.BuildId) 
-              includeRootFolder: false 
+              rootFolderOrFile: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
+              includeRootFolder: false
               archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
 
           - task: PublishPipelineArtifact@1
@@ -86,4 +86,11 @@ stages:
               targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
               artifactName: tfplan-$(System.JobId)
 
-          # FIXME: Apply plan
+          # - template: .azure-pipelines/run-terragrunt.yml
+          #   parameters:
+          #     awsRegion: eu-west-1
+          #     awsServiceConnection: sje-aws-origin
+          #     tgCommand: apply
+          #     tgOptions: "$(Agent.TempDirectory)/tfplan.out"
+          #     tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
+          #     workingDirectory: ${{ variables.terraformStack }}
