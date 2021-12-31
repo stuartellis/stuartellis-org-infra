@@ -9,13 +9,6 @@ parameters:
     type: string
   - name: tfLogLevel
     type: string
-    default: ERROR
-    values:
-      - TRACE
-      - DEBUG
-      - INFO
-      - WARN
-      - ERROR
   - name: tfLogPath
     type: string
   - name: tgOptions
