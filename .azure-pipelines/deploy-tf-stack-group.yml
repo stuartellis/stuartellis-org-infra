@@ -1,0 +1,54 @@
+parameters:
+  - name: awsRegion
+    type: string
+  - name: awsServiceConnection
+    type: string
+  - name: environment
+    type: string
+  - name: projectName
+    type: string
+  - name: outputPath
+    type: string
+  - name: stackGroupPath
+    type: string
+  - name: terraformModulesRepo
+    type: string
+  - name: terraformStacks
+    type: object
+  - name: vmImage
+    type: string
+
+stages:
+  - stage:
+    displayName: Run Terraform
+    dependsOn: testTerraformCode
+    jobs:
+      - deployment: runTerragrunt
+        displayName: Run Terragrunt
+        pool:
+          vmImage: ${{ parameters.vmImage }}
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - checkout: ${{ parameters.terraformModulesRepo }}
+
+                - template: setup-binaries.yml
+                  parameters:
+                    workingDirectory: ${{ variables.name }}
+
+                - ${{ each stack in terraformStacks }}:
+                    - template: deploy-tf-stack.yml
+                      parameters:
+                        awsRegion: ${{ parameters.awsRegion }}
+                        awsServiceConnection: ${{ parameters.awsServiceConnection }}
+                        projectName: ${{ parameters.projectName }}
+                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
+                        terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+
+                - template: archive-outputs.yml
+                  parameters:
+                    prefix: ${{ parameters.runIdentifier }}
+                    outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}

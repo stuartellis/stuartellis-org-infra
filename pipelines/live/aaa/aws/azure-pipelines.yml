@@ -1,0 +1,53 @@
+variables:
+  - template: ../../../.azure-pipelines/variables.yml
+
+name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    exclude:
+      - CONTRIBUTING.md
+      - README.md
+
+resources:
+  repositories:
+    - repository: stuartellis-org-tf-modules
+      type: git
+      name: stuartellis-org-tf-modules
+      ref: refs/heads/develop
+
+stages:
+  - stage: testTerraformCode
+    displayName: Test Terraform Code
+    jobs:
+      - job: runTerragrunt
+        displayName: Run Terragrunt
+        pool:
+          vmImage: ${{variables.vmImage}}
+        steps:
+          - checkout: self
+          - checkout: stuartellis-org-tf-modules
+
+          - template: ../../../.azure-pipelines/setup-binaries.yml
+            parameters:
+              workingDirectory: ${{ variables.name }}
+
+          # FIXME: Add code tests!
+
+  # Stacks for AWS us-east-1 "shared"
+  - template: ../../../.azure-pipelines/deploy-tf-stack-group.yml
+    parameters:
+      environment: dev
+      awsServiceConnection: sje-aws-origin
+      awsRegion: us-east-1
+      projectName: ${{ variables.name }}
+      runIdentifier: tf-live-aws-stuartellis-origin-aaa-us-east-1-shared-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared
+      vmImage: ${{ variables.vmImage }}
+      terraformModulesRepo: stuartellis-org-tf-modules
+      terraformStacks:
+        - "notifications": "notifications"

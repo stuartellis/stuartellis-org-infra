@@ -4,6 +4,46 @@ Automation for cloud environments.
 
 This uses [Terraform](https://www.terraform.io/) and [Terragrunt](https://terragrunt.gruntwork.io).
 
+## Directory Structure
+
+### Top-Level
+
+Top-level directories:
+
+- .azure-pipelines
+- cloudformation
+- pipelines
+- tf
+
+### Infrastructure Definitions
+
+The *cloudformation* and *tf* directories follow the same structure:
+
+    zone/
+        provider/
+            account/
+                product-line/
+                    region/
+                        product/
+
+> Each *product-line* has a *global* region for resources that are not specific to a region.
+
+For example:
+
+    labs/aws/stuartellis-origin/aaa/global/shared/
+
+### Pipeline Definitions
+
+The *pipelines* follow this structure:
+
+    zone/
+        product-line/
+            provider/
+              region/
+                 product/
+
+Each product-line has a pipeline per provider. The pipeline has one stage for each combination of region and environment. Each stage deploys specific stacks.
+
 ## Setup
 
 In the origin account, first use CloudFormation to set up the backend. See *cloudformation/stuartellis-origin/README.md* for details.
