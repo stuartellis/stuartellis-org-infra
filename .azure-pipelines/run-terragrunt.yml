@@ -24,6 +24,6 @@ steps:
         # TF_IN_AUTOMATION=1
         # TF_INPUT=0
         TF_LOG=DEBUG
-        ${{ parameters.tgExe }} run ${{ parameters.tgCommand }} ${{ parameters.tgOptions }}
+        ${{ parameters.tgExe }} ${{ parameters.tgCommand }} ${{ parameters.tgOptions }}
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}
