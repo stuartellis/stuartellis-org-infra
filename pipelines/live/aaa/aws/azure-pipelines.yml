@@ -1,5 +1,5 @@
 variables:
-  - template: ../../../.azure-pipelines/variables.yml
+  - template: ../../../../.azure-pipelines/variables.yml
 
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
@@ -32,14 +32,14 @@ stages:
           - checkout: self
           - checkout: stuartellis-org-tf-modules
 
-          - template: ../../../.azure-pipelines/setup-binaries.yml
+          - template: ../../../../.azure-pipelines/setup-binaries.yml
             parameters:
               workingDirectory: ${{ variables.name }}
 
           # FIXME: Add code tests!
 
   # Stacks for AWS us-east-1 "shared"
-  - template: ../../../.azure-pipelines/deploy-tf-stack-group.yml
+  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
     parameters:
       environment: dev
       awsServiceConnection: sje-aws-origin
