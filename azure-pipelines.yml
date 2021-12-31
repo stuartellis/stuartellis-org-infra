@@ -1,5 +1,7 @@
 variables:
   - template: .azure-pipelines/variables.yml
+  - name: terraformStack
+    value: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
 
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
@@ -44,7 +46,7 @@ stages:
               awsServiceConnection: sje-aws-origin
               tgCommand: validate
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
-              workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+              workingDirectory: ${{ variables.terraformStack }}
 
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
@@ -53,7 +55,7 @@ stages:
               tgCommand: plan
               tgOptions: "-out $(Agent.TempDirectory)/tfplan"
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
-              workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+              workingDirectory: ${{ variables.terraformStack }}
 
           - template: .azure-pipelines/run-terragrunt.yml
             parameters:
@@ -62,12 +64,26 @@ stages:
               tgCommand: show
               tgOptions: "-json $(Agent.TempDirectory)/tfplan > $(Agent.TempDirectory)/tfplan.json"
               tgExe: $(Build.Repository.LocalPath)/stuartellis-org-infra/bin/terragrunt
-              workingDirectory: $(Build.Repository.LocalPath)/stuartellis-org-infra/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
+              workingDirectory: ${{ variables.terraformStack }}
+
+          - task: CopyFiles@2
+            displayName: Copy Terraform plan
+            inputs:
+              sourceFolder: ${{ variables.terraformStack }}
+              contents: tfplan* 
+              targetFolder: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
+
+          - task: ArchiveFiles@2
+            displayName: Create ZIP for Terraform plan
+            inputs:
+              rootFolderOrFile: $(Agent.TempDirectory)/tfplan-$(Build.BuildId) 
+              includeRootFolder: false 
+              archiveFile: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
 
           - task: PublishPipelineArtifact@1
-            displayName: Publish Terraform plan
+            displayName: Publish ZIP of Terraform plan
             inputs:
-              targetPath: $(Agent.TempDirectory)
+              targetPath: $(Build.ArtifactStagingDirectory)/tfplan-$(Build.BuildId).zip
               artifactName: tfplan-$(System.JobId)
 
           # FIXME: Apply plan
