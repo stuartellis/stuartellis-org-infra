@@ -24,8 +24,8 @@ stages:
   - stage: testTerraformCode
     displayName: Test Terraform Code
     jobs:
-      - job: runTerragrunt
-        displayName: Run Terragrunt
+      - job: runLocalTests
+        displayName: Run Local Tests
         pool:
           vmImage: ${{variables.vmImage}}
         steps:
