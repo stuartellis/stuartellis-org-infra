@@ -1,7 +1,7 @@
 parameters:
-  - name: awsRegion
+  - name: cloudRegion
     type: string
-  - name: awsServiceConnection
+  - name: providerServiceConnection
     type: string
   - name: dryRun
     type: boolean
@@ -44,8 +44,8 @@ stages:
                 - ${{ each terraformStack in parameters.terraformStacks }}:
                     - template: compile-tf-plan-aws.yml
                       parameters:
-                        awsRegion: ${{ parameters.awsRegion }}
-                        awsServiceConnection: ${{ parameters.awsServiceConnection }}
+                        cloudRegion: ${{ parameters.cloudRegion }}
+                        providerServiceConnection: ${{ parameters.providerServiceConnection }}
                         projectName: ${{ parameters.projectName }}
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
@@ -55,8 +55,8 @@ stages:
                     - ${{ if eq(parameters.dryRun, false) }}:
                         - template: apply-tf-plan-aws.yml
                           parameters:
-                            awsRegion: ${{ parameters.awsRegion }}
-                            awsServiceConnection: ${{ parameters.awsServiceConnection }}
+                            cloudRegion: ${{ parameters.cloudRegion }}
+                            providerServiceConnection: ${{ parameters.providerServiceConnection }}
                             targetName: ${{ terraformStack.Key }}
                             terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
                             terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}

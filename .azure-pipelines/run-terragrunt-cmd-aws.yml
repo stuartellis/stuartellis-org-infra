@@ -1,7 +1,7 @@
 parameters:
-  - name: awsRegion
+  - name: cloudRegion
     type: string
-  - name: awsServiceConnection
+  - name: providerServiceConnection
     type: string
   - name: targetName
     type: string
@@ -19,8 +19,8 @@ steps:
   - task: AWSShellScript@1
     displayName: Run Terragrunt ${{ parameters.tgCommand }} for ${{ parameters.targetName }}
     inputs:
-      awsCredentials: ${{ parameters.awsServiceConnection }}
-      regionName: ${{ parameters.awsRegion }}
+      awsCredentials: ${{ parameters.providerServiceConnection }}
+      regionName: ${{ parameters.cloudRegion }}
       scriptType: inline
       inlineScript: |
         TF_IN_AUTOMATION=1

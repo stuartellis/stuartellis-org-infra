@@ -42,8 +42,8 @@ stages:
   - template: ../../../../.azure-pipelines/deploy-tf-stack-group-aws.yml
     parameters:
       environment: dev
-      awsServiceConnection: sje-aws-origin
-      awsRegion: us-east-1
+      providerServiceConnection: sje-aws-origin
+      cloudRegion: us-east-1
       dryRun: ${{ variables.dryRun }}
       projectName: ${{ variables.name }}
       runIdentifier: tf-dev-live-aws-stuartellis-origin-aaa-us-east-1-shared-$(Build.BuildId)

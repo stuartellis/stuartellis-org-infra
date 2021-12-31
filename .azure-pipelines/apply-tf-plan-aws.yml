@@ -1,7 +1,7 @@
 parameters:
-  - name: awsRegion
+  - name: cloudRegion
     type: string
-  - name: awsServiceConnection
+  - name: providerServiceConnection
     type: string
   - name: targetName
     type: string
@@ -15,8 +15,8 @@ parameters:
 steps:
   - template: run-terragrunt-cmd-aws.yml
     parameters:
-      awsRegion: ${{ parameters.awsRegion }}
-      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      cloudRegion: ${{ parameters.cloudRegion }}
+      providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
       tgCommand: apply
       tgOptions: "${{ parameters.terraformOutputDir }}/tfplan.out"

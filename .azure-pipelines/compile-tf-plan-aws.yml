@@ -1,7 +1,7 @@
 parameters:
-  - name: awsRegion
+  - name: cloudRegion
     type: string
-  - name: awsServiceConnection
+  - name: providerServiceConnection
     type: string
   - name: projectName
     type: string
@@ -26,8 +26,8 @@ steps:
   # Validate configuration for stack
   - template: run-terragrunt-cmd-aws.yml
     parameters:
-      awsRegion: ${{ parameters.awsRegion }}
-      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      cloudRegion: ${{ parameters.cloudRegion }}
+      providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
       tgCommand: validate
       tgExe: ${{ parameters.terragruntExe }}
@@ -36,8 +36,8 @@ steps:
   # Generate Terraform plan file for stack
   - template: run-terragrunt-cmd-aws.yml
     parameters:
-      awsRegion: ${{ parameters.awsRegion }}
-      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      cloudRegion: ${{ parameters.cloudRegion }}
+      providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
       tgCommand: plan
       tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
@@ -47,8 +47,8 @@ steps:
   # Export a JSON version of Terraform plan file
   - template: run-terragrunt-cmd-aws.yml
     parameters:
-      awsRegion: ${{ parameters.awsRegion }}
-      awsServiceConnection: ${{ parameters.awsServiceConnection }}
+      cloudRegion: ${{ parameters.cloudRegion }}
+      providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
       tgCommand: show
       tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"

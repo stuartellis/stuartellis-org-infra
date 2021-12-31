@@ -63,8 +63,8 @@ stages:
 
                 - template: .azure-pipelines/compile-tf-plan.yml
                   parameters:
-                    awsRegion: eu-west-1
-                    awsServiceConnection: sje-aws-origin
+                    cloudRegion: eu-west-1
+                    providerServiceConnection: sje-aws-origin
                     projectName: ${{ variables.name }}
                     terraformOutputDir: $(Agent.TempDirectory)/tf-run-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                     terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
@@ -73,8 +73,8 @@ stages:
                 - ${{ if eq(variables.dryRun, false) }}:
                     - template: .azure-pipelines/apply-tf-plan.yml
                       parameters:
-                        awsRegion: eu-west-1
-                        awsServiceConnection: sje-aws-origin
+                        cloudRegion: eu-west-1
+                        providerServiceConnection: sje-aws-origin
                         projectName: ${{ variables.name }}
                         terraformOutputDir: $(Agent.TempDirectory)/tf-run-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
                         terraformSourceStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/$(Environment.Name)/us-east-1/shared/notifications
