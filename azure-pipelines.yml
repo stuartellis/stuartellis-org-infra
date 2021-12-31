@@ -1,11 +1,8 @@
 variables:
   - template: .azure-pipelines/variables.yml
 
-  - name: terraformStack
-    value: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
-
   - name: dryRun
-    value: "false"
+    value: "true"
 
 name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
@@ -30,29 +27,33 @@ stages:
   - stage: run
     displayName: Run
     jobs:
-      - job: run
+      - deployment: runTerragrunt
         displayName: Run Terragrunt
         pool:
           vmImage: ${{variables.vmImage}}
+        environment: aaa
         variables:
           - name: terraformPlanDir
             value: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)
-        steps:
-          - checkout: self
-          - checkout: stuartellis-org-tf-modules
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - checkout: stuartellis-org-tf-modules
 
-          - template: .azure-pipelines/setup-binaries.yml
-            parameters:
-              cacheKeyFile: ${{ variables.name }}/package.json
-              cacheName: binaries
-              workingDirectory: ${{ variables.name }}
+                - template: .azure-pipelines/setup-binaries.yml
+                  parameters:
+                    cacheKeyFile: ${{ variables.name }}/package.json
+                    cacheName: binaries
+                    workingDirectory: ${{ variables.name }}
 
-          - template: .azure-pipelines/deploy-terragrunt-stack.yml
-            parameters:
-              awsRegion: eu-west-1
-              awsServiceConnection: sje-aws-origin
-              dryRun: ${{ variables.dryRun }}
-              projectName: ${{ variables.name }}
-              terraformPlanDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
-              terraformStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared/notifications
-              terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
+                - template: .azure-pipelines/deploy-terragrunt-stack.yml
+                  parameters:
+                    awsRegion: eu-west-1
+                    awsServiceConnection: sje-aws-origin
+                    dryRun: ${{ variables.dryRun }}
+                    projectName: ${{ variables.name }}
+                    terraformPlanDir: $(Agent.TempDirectory)/tfplan-$(Build.BuildId)/aws-sjeo-aaa-useast1-s-n
+                    terraformStackDir: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/${{ Environment.Name }}/us-east-1/shared/notifications
+                    terragruntExe: $(Build.Repository.LocalPath)/${{ variables.name }}/bin/terragrunt
