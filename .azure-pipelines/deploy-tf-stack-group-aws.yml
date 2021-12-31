@@ -3,6 +3,8 @@ parameters:
     type: string
   - name: awsServiceConnection
     type: string
+  - name: dryRun
+    type: boolean
   - name: environment
     type: string
   - name: projectName
@@ -40,13 +42,23 @@ stages:
                     workingDirectory: ${{ variables.name }}
 
                 - ${{ each stack in parameters.terraformStacks }}:
-                    - template: deploy-tf-stack.yml
+                    - template: compile-tf-plan-aws.yml
                       parameters:
                         awsRegion: ${{ parameters.awsRegion }}
                         awsServiceConnection: ${{ parameters.awsServiceConnection }}
                         projectName: ${{ parameters.projectName }}
-                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
+                        terraformOutputDir: ${{ parameters.terraformOutputDir }}
                         terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+                        terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+
+                    - ${{ if eq(parameters.dryRun, false) }}:
+                        - template: apply-tf-plan-aws.yml
+                          parameters:
+                            awsRegion: ${{ parameters.awsRegion }}
+                            awsServiceConnection: ${{ parameters.awsServiceConnection }}
+                            terraformOutputDir: ${{ parameters.terraformOutputDir }}
+                            terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+                            terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                 - template: archive-outputs.yml
                   parameters:

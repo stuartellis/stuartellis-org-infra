@@ -11,7 +11,7 @@ parameters:
     type: string
 
 steps:
-  - template: run-terragrunt-aws.yml
+  - template: run-terragrunt-cmd-aws.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}

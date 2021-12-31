@@ -22,7 +22,7 @@ steps:
       targetFolder: ${{ parameters.terraformOutputDir }}
 
   # Validate configuration for stack
-  - template: run-terragrunt-aws.yml
+  - template: run-terragrunt-cmd-aws.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
@@ -31,7 +31,7 @@ steps:
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Generate Terraform plan file for stack
-  - template: run-terragrunt-aws.yml
+  - template: run-terragrunt-cmd-aws.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
@@ -41,7 +41,7 @@ steps:
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
 
   # Export a JSON version of Terraform plan file
-  - template: run-terragrunt-aws.yml
+  - template: run-terragrunt-cmd-aws.yml
     parameters:
       awsRegion: ${{ parameters.awsRegion }}
       awsServiceConnection: ${{ parameters.awsServiceConnection }}
