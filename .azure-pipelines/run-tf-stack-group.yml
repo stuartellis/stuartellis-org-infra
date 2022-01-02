@@ -48,7 +48,7 @@ stages:
                         sourceDir: ${{ parameters.projectName }}
                         outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
 
-                    - template: test-tf.yml
+                    - template: test-tf-code.yml
                       parameters:
                         cloudRegion: ${{ parameters.cloudRegion }}
                         providerName: ${{ parameters.providerName }}
