@@ -27,7 +27,7 @@ steps:
       workingDirectory: ${{ parameters.terraformSourceDir }}
 
   # Export a JSON version of Terraform plan file
-  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
+  - template: run-tf-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
