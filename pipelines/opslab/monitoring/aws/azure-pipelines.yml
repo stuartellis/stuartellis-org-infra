@@ -45,7 +45,7 @@ stages:
       stageName: opslab
       environment: opslab
       providerName: aws
-      providerServiceConnection: sje-aws-labs
+      providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       projectName: ${{ variables.name }}

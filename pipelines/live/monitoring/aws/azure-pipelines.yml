@@ -41,7 +41,7 @@ stages:
       stageName: dev
       environment: dev
       providerName: aws
-      providerServiceConnection: sje-aws-origin
+      providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       projectName: ${{ variables.name }}
@@ -58,7 +58,7 @@ stages:
       previousStage: dev
       environment: qa
       providerName: aws
-      providerServiceConnection: sje-aws-origin
+      providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       projectName: ${{ variables.name }}
@@ -75,7 +75,7 @@ stages:
       previousStage: qa
       environment: prod
       providerName: aws
-      providerServiceConnection: sje-aws-origin
+      providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       projectName: ${{ variables.name }}
