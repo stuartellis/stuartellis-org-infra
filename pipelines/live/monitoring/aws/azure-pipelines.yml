@@ -3,6 +3,11 @@ parameters:
     displayName: Dry run only?
     type: boolean
     default: true
+  - name: terraformStacks
+    displayName: Terraform stacks
+    type: object
+    default:
+      notifications: notifications
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
@@ -41,8 +46,7 @@ stages:
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks:
-        notifications: notifications
+      terraformStacks: ${{ parameters.terraformStacks }}
 
   # Stacks for QA AWS us-east-1 "shared"
   - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
@@ -59,8 +63,7 @@ stages:
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/qa/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks:
-        notifications: notifications
+      terraformStacks: ${{ parameters.terraformStacks }}
 
   # Stacks for PROD AWS us-east-1 "shared"
   - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
@@ -77,5 +80,4 @@ stages:
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/prod/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks:
-        notifications: notifications
+      terraformStacks: ${{ parameters.terraformStacks }}
