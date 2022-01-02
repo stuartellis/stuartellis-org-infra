@@ -30,7 +30,7 @@ The *cloudformation* and *tf* directories follow the same structure:
 
 For example:
 
-    labs/aws/stuartellis-origin/aaa/global/shared/
+    labs/aws/stuartellis-origin/monitoring/global/shared/
 
 ### Pipeline Definitions
 
@@ -56,7 +56,7 @@ In the managed accounts, use CloudFormation to deploy an IAM role for Terraform:
 
 To apply all of the Terraform code for a region in an environment:
 
-    cd tf/live/aws/stuartellis-np/aaa/us-east-1
+    cd tf/live/aws/stuartellis-np/monitoring/us-east-1
     terragrunt run-all plan --terragrunt-source-update
     terragrunt run-all apply 
 
