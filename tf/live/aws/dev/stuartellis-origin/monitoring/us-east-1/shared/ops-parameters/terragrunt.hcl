@@ -7,5 +7,5 @@ terraform {
 }
 
 inputs = {
-  namespace = "monitoring"
+  namespace = "monitoring/dev"
 }
