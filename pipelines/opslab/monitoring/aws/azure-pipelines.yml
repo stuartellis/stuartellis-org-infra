@@ -34,6 +34,7 @@ stages:
   # Stacks for OPSLAB AWS us-east-1 "shared"
   - template: ../../../../.azure-pipelines/try-tf-stack-group.yml
     parameters:
+      stageName: opslab
       environment: opslab
       providerName: aws
       providerServiceConnection: sje-aws-labs
