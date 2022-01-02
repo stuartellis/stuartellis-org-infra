@@ -48,7 +48,7 @@ stages:
                         projectName: ${{ parameters.projectName }}
                         outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
 
-                    - template: test-tf-stack.yml
+                    - template: test-tf.yml
                       parameters:
                         cloudRegion: ${{ parameters.cloudRegion }}
                         providerName: ${{ parameters.providerName }}
@@ -56,7 +56,7 @@ stages:
                         projectName: ${{ parameters.projectName }}
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
-                        terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
+                        terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
                         terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                     - template: compile-tf-plan.yml
@@ -67,7 +67,7 @@ stages:
                         projectName: ${{ parameters.projectName }}
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
-                        terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
+                        terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
                         terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                     - ${{ if eq(parameters.dryRun, false) }}:
@@ -78,7 +78,7 @@ stages:
                             providerServiceConnection: ${{ parameters.providerServiceConnection }}
                             targetName: ${{ terraformStack.Key }}
                             terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
-                            terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+                            terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
                             terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                 - template: archive-outputs.yml

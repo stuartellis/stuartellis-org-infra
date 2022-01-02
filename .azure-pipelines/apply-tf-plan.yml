@@ -9,7 +9,7 @@ parameters:
     type: string
   - name: terraformOutputDir
     type: string
-  - name: terraformSourceStackDir
+  - name: terraformSourceDir
     type: string
   - name: terragruntExe
     type: string
@@ -23,4 +23,4 @@ steps:
       tgCommand: apply
       tgOptions: "${{ parameters.terraformOutputDir }}/tfplan.out"
       tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformSourceStackDir }}
+      workingDirectory: ${{ parameters.terraformSourceDir }}
