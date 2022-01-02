@@ -11,16 +11,16 @@ parameters:
     type: string
   - name: terraformSourceDir
     type: string
-  - name: terragruntExe
+  - name: terraformExe
     type: string
 
 steps:
   # Validate configuration for stack
-  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
+  - template: run-tf-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
-      tgCommand: validate
-      tgExe: ${{ parameters.terragruntExe }}
+      cmdName: validate
+      cmdExe: ${{ parameters.terraformExe }}
       workingDirectory: ${{ parameters.terraformSourceDir }}

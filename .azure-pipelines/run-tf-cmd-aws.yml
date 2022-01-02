@@ -5,11 +5,11 @@ parameters:
     type: string
   - name: targetName
     type: string
-  - name: tgCommand
+  - name: cmdName
     type: string
-  - name: tgExe
+  - name: cmdExe
     type: string
-  - name: tgOptions
+  - name: cmdOptions
     type: string
     default: ""
   - name: workingDirectory
@@ -17,7 +17,7 @@ parameters:
 
 steps:
   - task: AWSShellScript@1
-    displayName: Run Terragrunt ${{ parameters.tgCommand }} for ${{ parameters.targetName }}
+    displayName: Run ${{ parameters.cmdName }} for ${{ parameters.targetName }}
     inputs:
       awsCredentials: ${{ parameters.providerServiceConnection }}
       regionName: ${{ parameters.cloudRegion }}
@@ -25,6 +25,6 @@ steps:
       inlineScript: |
         TF_IN_AUTOMATION=1
         TF_INPUT=0
-        ${{ parameters.tgExe }} ${{ parameters.tgCommand }} ${{ parameters.tgOptions }}
+        ${{ parameters.cmdExe }} ${{ parameters.cmdName }} ${{ parameters.cmdOptions }}
       disableAutoCwd: true
       workingDirectory: ${{ parameters.workingDirectory }}

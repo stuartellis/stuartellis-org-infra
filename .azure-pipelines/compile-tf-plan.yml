@@ -11,19 +11,19 @@ parameters:
     type: string
   - name: terraformSourceDir
     type: string
-  - name: terragruntExe
+  - name: terraformExe
     type: string
 
 steps:
   # Generate Terraform plan file for stack
-  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
+  - template: run-tf-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
-      tgCommand: plan
-      tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
-      tgExe: ${{ parameters.terragruntExe }}
+      cmdName: plan
+      cmdOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
+      cmdExe: ${{ parameters.terraformExe }}
       workingDirectory: ${{ parameters.terraformSourceDir }}
 
   # Export a JSON version of Terraform plan file
@@ -32,7 +32,7 @@ steps:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
-      tgCommand: show
-      tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
-      tgExe: ${{ parameters.terragruntExe }}
+      cmdName: show
+      cmdOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
+      cmdExe: ${{ parameters.terraformExe }}
       workingDirectory: ${{ parameters.terraformSourceDir }}

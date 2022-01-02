@@ -56,7 +56,7 @@ stages:
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
                         terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
-                        terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+                        terraformExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                     - template: compile-tf-plan.yml
                       parameters:
@@ -66,7 +66,7 @@ stages:
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
                         terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
-                        terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+                        terraformExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                     - ${{ if eq(parameters.dryRun, false) }}:
                         - template: apply-tf-plan-aws.yml
@@ -77,7 +77,7 @@ stages:
                             targetName: ${{ terraformStack.Key }}
                             terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
                             terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
-                            terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+                            terraformExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                 - template: archive-outputs.yml
                   parameters:
