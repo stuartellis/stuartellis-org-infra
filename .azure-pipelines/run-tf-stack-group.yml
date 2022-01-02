@@ -44,6 +44,22 @@ stages:
                     workingDirectory: ${{ parameters.projectName }}
 
                 - ${{ each terraformStack in parameters.terraformStacks }}:
+                    - template: create-output-dir.yml
+                      parameters:
+                        projectName: ${{ parameters.projectName }}
+                        outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
+
+                    - template: test-tf-stack.yml
+                      parameters:
+                        cloudRegion: ${{ parameters.cloudRegion }}
+                        providerName: ${{ parameters.providerName }}
+                        providerServiceConnection: ${{ parameters.providerServiceConnection }}
+                        projectName: ${{ parameters.projectName }}
+                        targetName: ${{ terraformStack.Key }}
+                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
+                        terraformSourceStackDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
+                        terragruntExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
+
                     - template: compile-tf-plan.yml
                       parameters:
                         cloudRegion: ${{ parameters.cloudRegion }}

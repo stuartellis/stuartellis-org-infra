@@ -21,25 +21,8 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  - stage: testTerraformCode
-    displayName: Test Terraform Code
-    jobs:
-      - job: runLocalTests
-        displayName: Run Local Tests
-        pool:
-          vmImage: ${{variables.vmImage}}
-        steps:
-          - checkout: self
-          - checkout: stuartellis-org-tf-modules
-
-          - template: ../../../../.azure-pipelines/setup-binaries.yml
-            parameters:
-              workingDirectory: ${{ variables.name }}
-
-          # FIXME: Add code tests!
-
-  # Stacks for AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
+  # Stacks for DEV AWS us-east-1 "shared"
+  - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
     parameters:
       environment: dev
       providerName: aws

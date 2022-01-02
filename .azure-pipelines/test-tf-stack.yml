@@ -17,24 +17,12 @@ parameters:
     type: string
 
 steps:
-  # Generate Terraform plan file for stack
+  # Validate configuration for stack
   - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
     parameters:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
-      tgCommand: plan
-      tgOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
-      tgExe: ${{ parameters.terragruntExe }}
-      workingDirectory: ${{ parameters.terraformSourceStackDir }}
-
-  # Export a JSON version of Terraform plan file
-  - template: run-terragrunt-cmd-${{ parameters.providerName }}.yml
-    parameters:
-      cloudRegion: ${{ parameters.cloudRegion }}
-      providerServiceConnection: ${{ parameters.providerServiceConnection }}
-      targetName: ${{ parameters.targetName }}
-      tgCommand: show
-      tgOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
+      tgCommand: validate
       tgExe: ${{ parameters.terragruntExe }}
       workingDirectory: ${{ parameters.terraformSourceStackDir }}
