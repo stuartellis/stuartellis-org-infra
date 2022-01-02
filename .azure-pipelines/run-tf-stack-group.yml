@@ -24,10 +24,10 @@ parameters:
 
 stages:
   - stage:
-    displayName: Terraform for ${{ parameters.environment }}
+    displayName: Terraform for ${{ parameters.providerName }} ${{ parameters.environment }} ${{ parameters.cloudRegion }}
     jobs:
       - deployment:
-        displayName: Test and Run
+        displayName: Test and Run with ${{ parameters.providerServiceConnection }}
         pool:
           vmImage: ${{ parameters.vmImage }}
         environment: ${{ parameters.environment }}
