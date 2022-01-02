@@ -7,7 +7,7 @@ parameters:
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
 
-name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
+name: ${{variables.name}}-live-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
   branches:

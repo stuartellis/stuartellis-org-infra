@@ -11,7 +11,7 @@ parameters:
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
 
-name: ${{variables.name}}-$(Date:yyyyMMddhhmm).$(Rev:r)
+name: ${{variables.name}}-opslab-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
   branches:
