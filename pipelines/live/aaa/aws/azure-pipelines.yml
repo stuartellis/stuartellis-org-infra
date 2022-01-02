@@ -30,8 +30,8 @@ stages:
       cloudRegion: us-east-1
       dryRun: ${{ variables.dryRun }}
       projectName: ${{ variables.name }}
-      runIdentifier: tf-dev-live-aws-stuartellis-origin-aaa-us-east-1-shared-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/stuartellis-origin/aaa/us-east-1/shared
+      runIdentifier: tf-live-aws-dev-stuartellis-origin-aaa-us-east-1-shared-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/stuartellis-origin/aaa/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks:
