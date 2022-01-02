@@ -68,9 +68,10 @@ case $1 in
     echo "Expected Terragrunt version: $TERRAGRUNT_VERSION"
     echo "Expected TFLint version: $TFLINT_VERSION"
     echo "Detected CPU architecture: $ARCH"
-    echo "Detected Operating system: $OS"
-    echo "Terragrunt download URL: $TERRAGRUNT_URL" 
-    echo "TFLint download URL: $TFLINT_URL" 
+    echo "Detected operating system: $OS"
+    echo "Terragrunt download URL: $TERRAGRUNT_URL"
+    echo "TFLint download URL: $TFLINT_URL"
+    echo "Installed: " 
     ./"$BIN_DIR"/"$TERRAGRUNT_EXE" --version
   ;;
   clean)
