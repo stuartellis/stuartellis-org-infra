@@ -1,5 +1,5 @@
 parameters:
-  - name: projectName
+  - name: sourceFolder
     type: string
   - name: outputDir
     type: string
@@ -8,6 +8,6 @@ steps:
   - task: CopyFiles@2
     displayName: Copy package.json
     inputs:
-      sourceFolder: ${{ parameters.projectName }}
+      sourceFolder: ${{ parameters.sourceFolder }}
       contents: package.json
       targetFolder: ${{ parameters.outputDir }}

@@ -45,7 +45,7 @@ stages:
                 - ${{ each terraformStack in parameters.terraformStacks }}:
                     - template: create-output-dir.yml
                       parameters:
-                        projectName: ${{ parameters.projectName }}
+                        sourceFolder: ${{ parameters.projectName }}
                         outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
 
                     - template: test-tf.yml
@@ -53,7 +53,6 @@ stages:
                         cloudRegion: ${{ parameters.cloudRegion }}
                         providerName: ${{ parameters.providerName }}
                         providerServiceConnection: ${{ parameters.providerServiceConnection }}
-                        projectName: ${{ parameters.projectName }}
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
                         terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
@@ -64,7 +63,6 @@ stages:
                         cloudRegion: ${{ parameters.cloudRegion }}
                         providerName: ${{ parameters.providerName }}
                         providerServiceConnection: ${{ parameters.providerServiceConnection }}
-                        projectName: ${{ parameters.projectName }}
                         targetName: ${{ terraformStack.Key }}
                         terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
                         terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
