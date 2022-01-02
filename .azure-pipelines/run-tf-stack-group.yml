@@ -24,10 +24,10 @@ parameters:
 
 stages:
   - stage:
-    displayName: Terraform for ${{ parameters.providerName }} ${{ parameters.environment }} ${{ parameters.cloudRegion }}
+    displayName: Terraform for Stack Group
     jobs:
       - deployment:
-        displayName: Test and Run with ${{ parameters.providerServiceConnection }}
+        displayName: Test and Run with ${{ parameters.providerName }} ${{ parameters.environment }} ${{ parameters.cloudRegion }}
         pool:
           vmImage: ${{ parameters.vmImage }}
         environment: ${{ parameters.environment }}
@@ -45,7 +45,7 @@ stages:
                 - ${{ each terraformStack in parameters.terraformStacks }}:
                     - template: create-output-dir.yml
                       parameters:
-                        sourceFolder: ${{ parameters.projectName }}
+                        sourceDir: ${{ parameters.projectName }}
                         outputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
 
                     - template: test-tf.yml
