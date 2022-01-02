@@ -24,11 +24,10 @@ parameters:
 
 stages:
   - stage:
-    displayName: Run Terraform for ${{ parameters.environment }}
-    dependsOn: testTerraformCode
+    displayName: Terraform for ${{ parameters.environment }}
     jobs:
-      - deployment: runTerragrunt
-        displayName: Run Terragrunt
+      - deployment:
+        displayName: Test and Run
         pool:
           vmImage: ${{ parameters.vmImage }}
         environment: ${{ parameters.environment }}
