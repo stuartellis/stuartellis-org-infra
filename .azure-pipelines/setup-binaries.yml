@@ -5,9 +5,9 @@ parameters:
 steps:
   - bash: |
       ./do.sh setup
-    displayName: Run setup
+    displayName: Install tools
     workingDirectory: ${{ parameters.workingDirectory }}
   - bash: |
       ./do.sh info
-    displayName: Show details for setup
+    displayName: Show tool details
     workingDirectory: ${{ parameters.workingDirectory }}
