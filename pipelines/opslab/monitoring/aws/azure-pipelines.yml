@@ -22,9 +22,11 @@ name: ${{variables.name}}-opslab-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
 trigger:
   branches:
     include:
-      - main
       - develop
+      - feature/*
   paths:
+    include:
+      - tf/opslab/aws/*/*/monitoring/**
     exclude:
       - CONTRIBUTING.md
       - README.md

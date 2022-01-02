@@ -18,9 +18,11 @@ name: ${{variables.name}}-live-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
 trigger:
   branches:
     include:
-      - main
-      - develop
+      - master
+      - develop # FIXME: Remove this
   paths:
+    include:
+      - tf/live/aws/*/*/monitoring/**
     exclude:
       - CONTRIBUTING.md
       - README.md
@@ -30,7 +32,7 @@ resources:
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
-      ref: refs/heads/develop
+      ref: refs/heads/master
 
 stages:
   # Stacks for DEV AWS us-east-1 "shared"
