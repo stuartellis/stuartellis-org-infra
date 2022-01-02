@@ -4,7 +4,7 @@ parameters:
     type: boolean
     default: true
   - name: stackTeardown
-    displayName: Teardown stacks immediately
+    displayName: Teardown stacks
     type: boolean
     default: false
   - name: terraformStacks
