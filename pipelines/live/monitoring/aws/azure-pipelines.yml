@@ -28,7 +28,7 @@ resources:
 
 stages:
   # Stacks for DEV AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
+  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
     parameters:
       stageName: dev
       environment: dev
@@ -45,7 +45,7 @@ stages:
         notifications: notifications
 
   # Stacks for QA AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
+  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
     parameters:
       stageName: qa
       previousStage: dev
@@ -63,7 +63,7 @@ stages:
         notifications: notifications
 
   # Stacks for PROD AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
+  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
     parameters:
       stageName: prod
       previousStage: qa

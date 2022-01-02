@@ -28,7 +28,7 @@ resources:
 
 stages:
   # Stacks for OPSLAB AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
+  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
     parameters:
       environment: opslab
       providerName: aws
