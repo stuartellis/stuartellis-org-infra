@@ -1,4 +1,9 @@
 parameters:
+  - name: stageName
+    type: string
+  - name: previousStage
+    type: string
+    default: ""
   - name: cloudRegion
     type: string
   - name: providerServiceConnection
@@ -23,7 +28,8 @@ parameters:
     type: string
 
 stages:
-  - stage:
+  - stage: ${{ parameters.stageName }}
+    dependsOn: ${{ parameters.previousStage }}
     displayName: Terraform for ${{ parameters.providerName }} ${{ parameters.environment }} ${{ parameters.cloudRegion }}
     jobs:
       - deployment:

@@ -30,6 +30,7 @@ stages:
   # Stacks for DEV AWS us-east-1 "shared"
   - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
     parameters:
+      stageName: dev
       environment: dev
       providerName: aws
       providerServiceConnection: sje-aws-origin
@@ -46,6 +47,8 @@ stages:
   # Stacks for QA AWS us-east-1 "shared"
   - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
     parameters:
+      stageName: qa
+      previousStage: dev
       environment: qa
       providerName: aws
       providerServiceConnection: sje-aws-origin
@@ -62,6 +65,8 @@ stages:
   # Stacks for PROD AWS us-east-1 "shared"
   - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
     parameters:
+      stageName: prod
+      previousStage: qa
       environment: prod
       providerName: aws
       providerServiceConnection: sje-aws-origin
