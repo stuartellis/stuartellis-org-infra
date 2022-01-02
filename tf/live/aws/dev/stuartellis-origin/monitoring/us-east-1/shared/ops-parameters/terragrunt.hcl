@@ -7,5 +7,5 @@ terraform {
 }
 
 inputs = {
-  namespace = "${local.merged_config.productline}/${local.merged_config..environment}"
+  namespace = "${local.merged_config.productline}/${local.merged_config.environment}"
 }
