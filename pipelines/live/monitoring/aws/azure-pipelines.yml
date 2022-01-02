@@ -1,12 +1,13 @@
 parameters:
   - name: dryRun
-    displayName: Dry run only?
+    displayName: Dry run only
     type: boolean
     default: true
   - name: terraformStacks
     displayName: Terraform stacks
     type: object
     default:
+      ops-parameters: ops-parameters
       notifications: notifications
 
 variables:

@@ -1,12 +1,18 @@
 parameters:
   - name: dryRun
-    displayName: Dry run only?
+    displayName: Dry run only
     type: boolean
     default: true
   - name: stackTeardown
-    displayName: Teardown stacks?
+    displayName: Teardown stacks immediately
     type: boolean
     default: false
+  - name: terraformStacks
+    displayName: Terraform stacks
+    type: object
+    default:
+      ops-parameters: ops-parameters
+      notifications: notifications
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
@@ -46,5 +52,4 @@ stages:
       stackTeardown: ${{ parameters.stackTeardown }}
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks:
-        notifications: notifications
+      terraformStacks: ${{ parameters.terraformStacks }}
