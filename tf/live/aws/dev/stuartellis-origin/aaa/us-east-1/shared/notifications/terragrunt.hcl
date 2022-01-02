@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "../../../../../../../../../stuartellis-org-tf-modules//aws/sns_topic"
+  source = "../../../../../../../../../../stuartellis-org-tf-modules//aws/sns_topic"
 }
 
 inputs = {
