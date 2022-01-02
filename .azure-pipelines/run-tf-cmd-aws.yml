@@ -1,17 +1,17 @@
 parameters:
   - name: cloudRegion
     type: string
-  - name: providerServiceConnection
-    type: string
-  - name: targetName
+  - name: cmdExe
     type: string
   - name: cmdName
-    type: string
-  - name: cmdExe
     type: string
   - name: cmdOptions
     type: string
     default: ""
+  - name: providerServiceConnection
+    type: string
+  - name: targetName
+    type: string
   - name: workingDirectory
     type: string
 

@@ -20,7 +20,7 @@ steps:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
+      cmdExe: ${{ parameters.terraformExe }}
       cmdName: apply
       cmdOptions: "${{ parameters.terraformOutputDir }}/tfplan.out"
-      cmdExe: ${{ parameters.terraformExe }}
       workingDirectory: ${{ parameters.terraformSourceDir }}

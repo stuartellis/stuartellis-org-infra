@@ -21,9 +21,9 @@ steps:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
+      cmdExe: ${{ parameters.terraformExe }}
       cmdName: plan
       cmdOptions: "-out ${{ parameters.terraformOutputDir }}/tfplan.out"
-      cmdExe: ${{ parameters.terraformExe }}
       workingDirectory: ${{ parameters.terraformSourceDir }}
 
   # Export a JSON version of Terraform plan file
@@ -32,7 +32,7 @@ steps:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
+      cmdExe: ${{ parameters.terraformExe }}
       cmdName: show
       cmdOptions: "-json ${{ parameters.terraformOutputDir }}/tfplan.out > ${{ parameters.terraformOutputDir }}/tfplan.json"
-      cmdExe: ${{ parameters.terraformExe }}
       workingDirectory: ${{ parameters.terraformSourceDir }}

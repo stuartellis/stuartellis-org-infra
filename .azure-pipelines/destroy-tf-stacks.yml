@@ -18,6 +18,7 @@ steps:
       cloudRegion: ${{ parameters.cloudRegion }}
       providerServiceConnection: ${{ parameters.providerServiceConnection }}
       targetName: ${{ parameters.targetName }}
-      cmdName: destroy
       cmdExe: ${{ parameters.terraformExe }}
+      cmdName: destroy
+      cmdOptions: -auto-approve
       workingDirectory: ${{ parameters.terraformSourceDir }}
