@@ -24,7 +24,7 @@ parameters:
 
 stages:
   - stage:
-    displayName: Terraform for Stack Group
+    displayName: Terraform for Stack Group in ${{ parameters.providerName }} ${{ parameters.environment }} ${{ parameters.cloudRegion }}
     jobs:
       - deployment:
         displayName: Test and Run with ${{ parameters.providerName }} ${{ parameters.environment }} ${{ parameters.cloudRegion }}
