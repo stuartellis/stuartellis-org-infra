@@ -52,3 +52,19 @@ stages:
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks:
         notifications: notifications
+
+  # Stacks for PROD AWS us-east-1 "shared"
+  - template: ../../../../.azure-pipelines/run-tf-stack-group.yml
+    parameters:
+      environment: prod
+      providerName: aws
+      providerServiceConnection: sje-aws-origin
+      cloudRegion: us-east-1
+      dryRun: ${{ variables.dryRun }}
+      projectName: ${{ variables.name }}
+      runIdentifier: tf-live-aws-prod-stuartellis-origin-aaa-us-east-1-shared-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/prod/stuartellis-origin/aaa/us-east-1/shared
+      vmImage: ${{ variables.vmImage }}
+      terraformModulesRepo: stuartellis-org-tf-modules
+      terraformStacks:
+        notifications: notifications
