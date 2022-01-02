@@ -82,8 +82,8 @@ stages:
                         providerName: ${{ parameters.providerName }}
                         providerServiceConnection: ${{ parameters.providerServiceConnection }}
                         targetName: ${{ terraformStack.Key }}
-                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ stack.Key }}
-                        terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+                        terraformOutputDir: $(Agent.TempDirectory)/${{ parameters.runIdentifier }}/${{ terraformStack.Key }}
+                        terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
                         terraformExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                 - ${{ if and(eq(parameters.stackTeardown, true), eq(parameters.dryRun, false)) }}:
@@ -94,7 +94,7 @@ stages:
                         providerName: ${{ parameters.providerName }}
                         providerServiceConnection: ${{ parameters.providerServiceConnection }}
                         targetName: ${{ terraformStack.Key }}
-                        terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ stack.Key }}
+                        terraformSourceDir: ${{ parameters.stackGroupPath }}/${{ terraformStack.Key }}
                         terraformExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                 - template: archive-outputs.yml
