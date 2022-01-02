@@ -5,3 +5,7 @@ include {
 terraform {
   source = "../../../../../../../../../../stuartellis-org-tf-modules//aws/shared_ssm_parameters"
 }
+
+inputs = {
+  namespace = "cntr/prod"
+}
