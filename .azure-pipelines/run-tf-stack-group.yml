@@ -69,7 +69,7 @@ stages:
                         terraformExe: $(Build.Repository.LocalPath)/${{ parameters.projectName }}/bin/terragrunt
 
                     - ${{ if eq(parameters.dryRun, false) }}:
-                        - template: apply-tf-plan-aws.yml
+                        - template: apply-tf-plan.yml
                           parameters:
                             cloudRegion: ${{ parameters.cloudRegion }}
                             providerName: ${{ parameters.providerName }}
