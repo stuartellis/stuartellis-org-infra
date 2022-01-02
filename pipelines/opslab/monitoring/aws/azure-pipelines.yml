@@ -3,6 +3,10 @@ parameters:
     displayName: Dry run only?
     type: boolean
     default: true
+  - name: stackTeardown
+    displayName: Teardown stacks?
+    type: boolean
+    default: false
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
@@ -28,7 +32,7 @@ resources:
 
 stages:
   # Stacks for OPSLAB AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
+  - template: ../../../../.azure-pipelines/try-tf-stack-group.yml
     parameters:
       environment: opslab
       providerName: aws
@@ -38,6 +42,7 @@ stages:
       projectName: ${{ variables.name }}
       runIdentifier: tf-opslab-aws-opslab-stuartellis-np-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/opslab/aws/opslab/stuartellis-np/monitoring/us-east-1/shared
+      stackTeardown: ${{ parameters.stackTeardown }}
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks:
