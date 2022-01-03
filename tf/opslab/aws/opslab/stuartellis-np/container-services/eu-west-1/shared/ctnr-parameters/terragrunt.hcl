@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "../../../../../../../../../../stuartellis-org-tf-modules//aws/shared_ssm_parameters"
+  source = "../../../../../../../../../../stuartellis-org-tf-modules//aws/custom_ssm_parameters"
 }
 
 inputs = {
