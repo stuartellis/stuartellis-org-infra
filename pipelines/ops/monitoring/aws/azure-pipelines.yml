@@ -17,7 +17,7 @@ parameters:
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
 
-name: ${{variables.name}}-opslab-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
+name: ${{variables.name}}-ops-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
   branches:
@@ -26,7 +26,7 @@ trigger:
       - feature/*
   paths:
     include:
-      - tf/opslab/aws/*/*/monitoring/**
+      - tf/ops/aws/*/*/monitoring/**
     exclude:
       - CONTRIBUTING.md
       - README.md
@@ -53,8 +53,8 @@ stages:
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       projectName: ${{ variables.name }}
-      runIdentifier: tf-opslab-aws-opslab-stuartellis-np-monitoring-us-east-1-shared-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/opslab/aws/opslab/stuartellis-np/monitoring/us-east-1/shared
+      runIdentifier: tf-ops-aws-opslab-stuartellis-np-monitoring-us-east-1-shared-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/ops/aws/opslab/stuartellis-np/monitoring/us-east-1/shared
       stackTeardown: ${{ parameters.stackTeardown }}
       vmImage: ${{ variables.vmImage }}
       terraformModulesRepo: stuartellis-org-tf-modules
