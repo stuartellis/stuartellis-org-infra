@@ -2,7 +2,7 @@ parameters:
   - name: dryRun
     displayName: Dry run only
     type: boolean
-    default: true
+    default: false
   - name: stackTeardown
     displayName: Teardown stacks
     type: boolean
