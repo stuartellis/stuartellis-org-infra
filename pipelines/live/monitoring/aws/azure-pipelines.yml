@@ -29,14 +29,18 @@ trigger:
 
 resources:
   repositories:
+    - repository: shared
+      type: git
+      name: azdo-shared-tasks
+      ref: refs/heads/master
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
-      ref: refs/heads/master
+      ref: refs/heads/main
 
 stages:
   # Stacks for DEV AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
     parameters:
       stageName: dev
       environment: dev
@@ -52,7 +56,7 @@ stages:
       terraformStacks: ${{ parameters.terraformStacks }}
 
   # Stacks for QA AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
     parameters:
       stageName: qa
       previousStage: dev
@@ -69,7 +73,7 @@ stages:
       terraformStacks: ${{ parameters.terraformStacks }}
 
   # Stacks for PROD AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/deploy-tf-stack-group.yml
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
     parameters:
       stageName: prod
       previousStage: qa

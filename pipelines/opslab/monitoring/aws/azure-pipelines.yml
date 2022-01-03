@@ -33,6 +33,10 @@ trigger:
 
 resources:
   repositories:
+    - repository: shared
+      type: git
+      name: sje-ado-labs/azdo-shared-tasks
+      ref: refs/heads/master
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
@@ -40,7 +44,7 @@ resources:
 
 stages:
   # Stacks for OPSLAB AWS us-east-1 "shared"
-  - template: ../../../../.azure-pipelines/try-tf-stack-group.yml
+  - template: pipeline-templates/terraform/try-tf-stack-group.yml@shared
     parameters:
       stageName: opslab
       environment: opslab
