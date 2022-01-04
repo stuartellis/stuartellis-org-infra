@@ -61,6 +61,10 @@ if [ ! "${1:-}" ]; then
 fi
 
 case $1 in
+  clean)
+   [ -d $BIN_DIR ] && rm -r $BIN_DIR 
+   [ -d $TMP_DIR ] && rm -r $TMP_DIR 
+  ;;
   info)
     specify_arch
     specify_os
@@ -74,11 +78,7 @@ case $1 in
     echo "Installed: " 
     ./"$BIN_DIR"/"$TERRAGRUNT_EXE" --version
   ;;
-  clean)
-   [ -d $BIN_DIR ] && rm -r $BIN_DIR 
-   [ -d $TMP_DIR ] && rm -r $TMP_DIR 
-  ;;
-  setup)
+  install)
     specify_arch
     specify_os
     specify_download_urls

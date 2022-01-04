@@ -11,8 +11,8 @@
     }
   },
   "scripts": {
-    "clean": "rimraf bin tmp lint-results.xml tf/**/.terragrunt-cache tf/**/.terraform.lock.hcl",
-    "install": "./do.sh setup",
+    "clean": "./do.sh clean",
+    "install": "./do.sh install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
@@ -31,7 +31,6 @@
   "homepage": "https://github.com/stuartellis/stuartellis-org-infra#readme",
   "devDependencies": {
     "husky": "^7.0.0",
-    "lint-staged": "^12.0.2",
-    "rimraf": "^3.0.2"
+    "lint-staged": "^12.0.2"
   }
 }
