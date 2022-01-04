@@ -15,7 +15,7 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      BucketName: !Sub ${Prefix}-tfstate-${AWS::Region}
+      BucketName: !Sub ${Prefix}-tfstate-${AWS::AccountId}-${AWS::Region}
       VersioningConfiguration:
         Status: Enabled
       PublicAccessBlockConfiguration:
@@ -26,13 +26,25 @@ Resources:
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
-              SSEAlgorithm: 'aws:kms'
-              KMSMasterKeyID: !ImportValue 
-                'Fn::Sub': ${KmsKeyImport}
+              SSEAlgorithm: "aws:kms"
+              KMSMasterKeyID: !ImportValue
+                "Fn::Sub": ${KmsKeyImport}
             BucketKeyEnabled: true
       Tags:
         - Key: sje:purpose
           Value: terraform-backend
+
+  TfBackendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref TfBackendBucket
+      PolicyDocument:
+        Statement:
+          - Sid: DenyObjectDeletes
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:DeleteObject"
+            Resource: !Sub "arn:${AWS::Partition}:s3:::${TfBackendBucket}/*"
 
   TfBackendDynamoDbTable:
     Type: AWS::DynamoDB::Table
@@ -60,4 +72,3 @@ Outputs:
     Value: !GetAtt TfBackendDynamoDbTable.Arn
     Export:
       Name: !Sub "${AWS::StackName}-ddb-lock-arn"
- 
