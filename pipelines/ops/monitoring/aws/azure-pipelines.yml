@@ -36,7 +36,7 @@ resources:
     - repository: shared
       type: git
       name: sje-ado-labs/azdo-shared-tasks
-      ref: refs/heads/master
+      ref: refs/heads/main
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
