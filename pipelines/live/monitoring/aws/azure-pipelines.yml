@@ -48,7 +48,6 @@ stages:
       providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
-      projectName: ${{ variables.name }}
       runIdentifier: tf-live-aws-dev-stuartellis-origin-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
@@ -82,7 +81,6 @@ stages:
       providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
-      projectName: ${{ variables.name }}
       runIdentifier: tf-live-aws-prod-stuartellis-origin-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/prod/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}

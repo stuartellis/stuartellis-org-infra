@@ -52,7 +52,6 @@ stages:
       providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
-      projectName: ${{ variables.name }}
       runIdentifier: tf-ops-aws-opslab-stuartellis-np-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/ops/aws/opslab/stuartellis-np/monitoring/us-east-1/shared
       stackTeardown: ${{ parameters.stackTeardown }}
