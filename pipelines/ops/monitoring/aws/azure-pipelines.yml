@@ -44,7 +44,7 @@ resources:
 
 stages:
   # Stacks for OPSLAB AWS us-east-1 "shared"
-  - template: pipeline-templates/terraform/try-tf-stack-group.yml@shared
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
     parameters:
       stageName: opslab
       environment: opslab
