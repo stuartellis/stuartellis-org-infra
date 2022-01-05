@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+  A replica S3 bucket for a Terraform backend
+
+Parameters:
+  Prefix:
+    Type: String
+    Description: The prefix for AWS resource names
+
+Resources:
+  TfBackendReplicaBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub ${Prefix}-tfstate-replica-${AWS::AccountId}-${AWS::Region}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: sje:purpose
+          Value: terraform-backend
+
+  TfBackendReplicaBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref TfBackendReplicaBucket
+      PolicyDocument:
+        Statement:
+          - Sid: Deny deletion of objects
+            Effect: Deny
+            Principal: "*"
+            Action:
+              - "s3:DeleteObject"
+            Resource: !Join ["/", [!GetAtt TfBackendReplicaBucket.Arn, "*"]]
+          - Sid: Deny requests that do not use TLS
+            Effect: Deny
+            Principal: "*"
+            Action:
+              - "s3:*"
+            Resource: !Join ["/", [!GetAtt TfBackendReplicaBucket.Arn, "*"]]
+            Condition:
+              Bool:
+                "aws:SecureTransport": "false"
+          - Sid: Deny object uploads not using default encryption settings
+            Effect: Deny
+            Principal: "*"
+            Action:
+              - "s3:PutObject"
+            Resource: !Join ["/", [!GetAtt TfBackendReplicaBucket.Arn, "*"]]
+            Condition:
+              # The Null-condition allows uploads without encryption information in the request
+              # (i.e., requests with default S3 bucket encryption) and the
+              # StringNotEquals-condition denies uploads with invalid encryption information.
+              # Note that using StringNotEqualsIfExists doesn’t work for uploads without encryption information.
+              # The condition evaluates to true and denies the upload because of the Deny-effect.
+              "Null":
+                s3:x-amz-server-side-encryption: false
+              StringNotEqualsIfExists:
+                s3:x-amz-server-side-encryption:
+                  - "AES256"
+                  - "aws:kms"
+
+Outputs:
+  TfBackendReplicaBucket:
+    Value: !GetAtt TfBackendReplicaBucket.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-s3-state-replica-arn"
