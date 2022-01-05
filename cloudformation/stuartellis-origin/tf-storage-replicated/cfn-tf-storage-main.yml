@@ -35,9 +35,15 @@ Resources:
       ReplicationConfiguration:
         Role: !GetAtt TfBackendBucketReplicationRole.Arn
         Rules:
-          - Destination:
+          - Id: ReplicationToSecondary
+            Destination:
               Bucket: !Ref ReplicationBucketArn
-            Id: ReplicationRule
+              ReplicationTime:
+                Status: Enabled
+                Time:
+                  Minutes: 15
+            DeleteMarkerReplication:
+              Status: Disabled
             Prefix: ""
             Status: Enabled
 
