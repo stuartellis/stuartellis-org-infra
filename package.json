@@ -10,6 +10,9 @@
       "version": "0.35.16"
     },
     "tflint": {
+      "rulesets": {
+        "ruleset-aws": "0.10.1"
+      },
       "version": "0.34.1"
     }
   },

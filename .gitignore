@@ -2,7 +2,9 @@
 .vscode
 
 ## Temporary files
+config
 bin
+plugins
 tmp
 .DS_Store
 lint-results.xml
