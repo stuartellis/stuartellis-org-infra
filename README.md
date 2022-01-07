@@ -54,6 +54,8 @@ In the managed accounts, use CloudFormation to deploy an IAM role for Terraform:
 
 ## Usage
 
+Add the *bin/* directory for this project to your PATH.
+
 To apply all of the Terraform code for a region in an environment:
 
     cd tf/live/aws/stuartellis-np/monitoring/us-east-1
