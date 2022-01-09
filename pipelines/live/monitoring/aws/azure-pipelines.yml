@@ -87,7 +87,7 @@ stages:
       runIdentifier: tf-live-aws-prod-stuartellis-origin-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/prod/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
-      terraformConfigDir: $(Build.Repository.LocalPath)
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks: ${{ parameters.terraformStacks }}

@@ -56,7 +56,7 @@ stages:
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/ops/aws/opslab/stuartellis-np/monitoring/us-east-1/shared
       stackTeardown: ${{ parameters.stackTeardown }}
       vmImage: ${{ variables.vmImage }}
-      terraformConfigDir: $(Build.Repository.LocalPath)
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks: ${{ parameters.terraformStacks }}
