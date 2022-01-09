@@ -51,7 +51,7 @@ stages:
       runIdentifier: tf-live-aws-dev-stuartellis-origin-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
-      terraformConfigDir: $(Build.Repository.LocalPath)
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks: ${{ parameters.terraformStacks }}
@@ -69,7 +69,7 @@ stages:
       runIdentifier: tf-live-aws-qa-stuartellis-origin-monitoring-us-east-1-shared-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/qa/stuartellis-origin/monitoring/us-east-1/shared
       vmImage: ${{ variables.vmImage }}
-      terraformConfigDir: $(Build.Repository.LocalPath)
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks: ${{ parameters.terraformStacks }}
