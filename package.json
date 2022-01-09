@@ -17,8 +17,8 @@
     }
   },
   "scripts": {
-    "clean": "tfenv clean",
-    "install": "tfenv install",
+    "clean": "./scripts/tfenv clean",
+    "install": "./scripts/tfenv install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
