@@ -1,6 +1,6 @@
 {
   "name": "stuartellis-org-infra",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Infrastructure for stuartellis.org",
   "config": {
     "terraform": {
@@ -31,6 +31,7 @@
   },
   "author": "Stuart Ellis <stuart@stuartellis.name>",
   "license": "MIT",
+  "private": true,
   "bugs": {
     "url": "https://github.com/stuartellis/stuartellis-org-infra/issues"
   },
