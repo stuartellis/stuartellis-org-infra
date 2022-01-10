@@ -18,7 +18,7 @@ name: ${{variables.name}}-live-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
 trigger:
   branches:
     include:
-      - master
+      - main
       - develop # FIXME: Remove this
   paths:
     include:
