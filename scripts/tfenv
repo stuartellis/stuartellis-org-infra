@@ -105,6 +105,7 @@ case $1 in
     [ -d "$CONFIG_DIR" ] && rm -r "$CONFIG_DIR"
     [ -d "$PLUGINS_DIR" ] && rm -r "$PLUGINS_DIR"
     [ -d "$TMP_DIR" ] && rm -r "$TMP_DIR"
+    find . -name '.terra*' | xargs rm -r
   ;;
   configure)
     specify_dirs
