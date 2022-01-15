@@ -105,7 +105,8 @@ case $1 in
     [ -d "$CONFIG_DIR" ] && rm -r "$CONFIG_DIR"
     [ -d "$PLUGINS_DIR" ] && rm -r "$PLUGINS_DIR"
     [ -d "$TMP_DIR" ] && rm -r "$TMP_DIR"
-    find . -name '.terra*' -exec rm -r {} \;
+    find . -type f -name '.terraform.lock.hcl' -print0 | xargs rm
+    find . -type d -name '.terragrunt-cache' -print0 | xargs rm -r
   ;;
   configure)
     specify_dirs
