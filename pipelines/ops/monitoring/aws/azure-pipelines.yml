@@ -3,10 +3,6 @@ parameters:
     displayName: Dry run only
     type: boolean
     default: false
-  - name: stackTeardown
-    displayName: Teardown stacks
-    type: boolean
-    default: false
   - name: terraformStacks
     displayName: Terraform stacks
     type: object
@@ -17,13 +13,22 @@ parameters:
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
 
-name: ${{variables.name}}-ops-monitoring-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
+  - name: cloudAccount
+    value: stuartellis-np
+
+  - name: productLine
+    value: monitoring
+
+  - name: product
+    value: shared
+
+name: ${{variables.name}}-ops-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
   branches:
     include:
-      - develop
-      - feature/*
+      - main
+      - develop # FIXME: Remove this
   paths:
     include:
       - tf/ops/aws/*/*/monitoring/**
@@ -35,7 +40,7 @@ resources:
   repositories:
     - repository: shared
       type: git
-      name: sje-ado-labs/azdo-shared-tasks
+      name: azdo-shared-tasks
       ref: refs/heads/main
     - repository: stuartellis-org-tf-modules
       type: git
@@ -43,18 +48,16 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  # Stacks for OPSLAB AWS us-east-1 "shared"
   - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
     parameters:
-      stageName: opslab
-      environment: opslab
+      stageName: dev
+      environment: dev
       providerName: aws
       providerServiceConnection: sje-aws-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-ops-aws-opslab-stuartellis-np-monitoring-us-east-1-shared-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/ops/aws/opslab/stuartellis-np/monitoring/us-east-1/shared
-      stackTeardown: ${{ parameters.stackTeardown }}
+      runIdentifier: tf-ops-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/ops/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
       vmImage: ${{ variables.vmImage }}
       terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
