@@ -7,8 +7,8 @@ parameters:
     displayName: Terraform stacks
     type: object
     default:
-      ops-parameters: ops-parameters
-      notifications: notifications
+      dummy_s1: dummy_s1
+      dummy_s2: dummy_s2
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
@@ -22,7 +22,7 @@ variables:
   - name: product
     value: shared
 
-name: ${{variables.name}}-live-${{ variables.productLine }}-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
+name: ${{variables.name}}-live-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
   branches:
