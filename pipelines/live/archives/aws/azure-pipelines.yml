@@ -48,53 +48,16 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  # Stacks for DEV AWS us-east-1 "shared"
   - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
     parameters:
       stageName: dev
       environment: dev
       providerName: aws
       providerServiceConnection: sje-aws-tf
-      cloudRegion: us-east-1
+      cloudRegion: eu-west-1
       dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
-      vmImage: ${{ variables.vmImage }}
-      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
-      terraformInstallationDir: $(Agent.TempDirectory)
-      terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks: ${{ parameters.terraformStacks }}
-
-  # Stacks for QA AWS us-east-1 "shared"
-  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
-    parameters:
-      stageName: qa
-      previousStage: dev
-      environment: qa
-      providerName: aws
-      providerServiceConnection: sje-aws-tf
-      cloudRegion: us-east-1
-      dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-live-aws-qa-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/qa/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
-      vmImage: ${{ variables.vmImage }}
-      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
-      terraformInstallationDir: $(Agent.TempDirectory)
-      terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks: ${{ parameters.terraformStacks }}
-
-  # Stacks for PROD AWS us-east-1 "shared"
-  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
-    parameters:
-      stageName: prod
-      previousStage: qa
-      environment: prod
-      providerName: aws
-      providerServiceConnection: sje-aws-tf
-      cloudRegion: us-east-1
-      dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-live-aws-prod-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/prod/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
+      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-eu-west-1-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/eu-west-1/${{ variables.product }}
       vmImage: ${{ variables.vmImage }}
       terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
