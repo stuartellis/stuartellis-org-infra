@@ -45,7 +45,7 @@ resources:
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
-      ref: refs/heads/main
+      ref: refs/heads/develop
 
 stages:
   # Stacks for DEV AWS us-east-1 "shared"
