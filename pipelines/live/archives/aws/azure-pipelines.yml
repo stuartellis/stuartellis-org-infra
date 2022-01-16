@@ -20,7 +20,7 @@ variables:
     value: archives_pl
 
   - name: product
-    value: shared
+    value: archives_stacks
 
 name: ${{variables.name}}-live-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
