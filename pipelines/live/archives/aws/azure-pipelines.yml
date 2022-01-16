@@ -58,7 +58,7 @@ stages:
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/stuartellis-origin/${{ variables.productLine }}/us-east-1/${{ variables.product }}
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
       vmImage: ${{ variables.vmImage }}
       terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
