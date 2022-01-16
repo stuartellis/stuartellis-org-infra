@@ -1,0 +1,102 @@
+parameters:
+  - name: dryRun
+    displayName: Dry run only
+    type: boolean
+    default: false
+  - name: terraformStacks
+    displayName: Terraform stacks
+    type: object
+    default:
+      ops-parameters: ops-parameters
+      notifications: notifications
+
+variables:
+  - template: ../../../../.azure-pipelines/variables.yml
+
+  - name: cloudAccount
+    value: stuartellis-origin
+
+  - name: productLine
+    value: archives_pl
+
+  - name: product
+    value: shared
+
+name: ${{variables.name}}-live-${{ variables.productLine }}-aws-$(Date:yyyyMMddhhmm).$(Rev:r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop # FIXME: Remove this
+  paths:
+    include:
+      - tf/live/aws/*/*/monitoring/**
+    exclude:
+      - CONTRIBUTING.md
+      - README.md
+
+resources:
+  repositories:
+    - repository: shared
+      type: git
+      name: azdo-shared-tasks
+      ref: refs/heads/main
+    - repository: stuartellis-org-tf-modules
+      type: git
+      name: stuartellis-org-tf-modules
+      ref: refs/heads/main
+
+stages:
+  # Stacks for DEV AWS us-east-1 "shared"
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
+    parameters:
+      stageName: dev
+      environment: dev
+      providerName: aws
+      providerServiceConnection: sje-aws-tf
+      cloudRegion: us-east-1
+      dryRun: ${{ parameters.dryRun }}
+      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/stuartellis-origin/${{ variables.productLine }}/us-east-1/${{ variables.product }}
+      vmImage: ${{ variables.vmImage }}
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
+      terraformInstallationDir: $(Agent.TempDirectory)
+      terraformModulesRepo: stuartellis-org-tf-modules
+      terraformStacks: ${{ parameters.terraformStacks }}
+
+  # Stacks for QA AWS us-east-1 "shared"
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
+    parameters:
+      stageName: qa
+      previousStage: dev
+      environment: qa
+      providerName: aws
+      providerServiceConnection: sje-aws-tf
+      cloudRegion: us-east-1
+      dryRun: ${{ parameters.dryRun }}
+      runIdentifier: tf-live-aws-qa-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/qa/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
+      vmImage: ${{ variables.vmImage }}
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
+      terraformInstallationDir: $(Agent.TempDirectory)
+      terraformModulesRepo: stuartellis-org-tf-modules
+      terraformStacks: ${{ parameters.terraformStacks }}
+
+  # Stacks for PROD AWS us-east-1 "shared"
+  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
+    parameters:
+      stageName: prod
+      previousStage: qa
+      environment: prod
+      providerName: aws
+      providerServiceConnection: sje-aws-tf
+      cloudRegion: us-east-1
+      dryRun: ${{ parameters.dryRun }}
+      runIdentifier: tf-live-aws-prod-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/prod/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
+      vmImage: ${{ variables.vmImage }}
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
+      terraformInstallationDir: $(Agent.TempDirectory)
+      terraformModulesRepo: stuartellis-org-tf-modules
+      terraformStacks: ${{ parameters.terraformStacks }}
