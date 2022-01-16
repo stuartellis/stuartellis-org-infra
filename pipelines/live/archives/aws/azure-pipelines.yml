@@ -31,7 +31,7 @@ trigger:
       - develop # FIXME: Remove this
   paths:
     include:
-      - tf/live/aws/*/*/monitoring/**
+      - tf/live/aws/*/*/archives_pl/**
     exclude:
       - CONTRIBUTING.md
       - README.md
