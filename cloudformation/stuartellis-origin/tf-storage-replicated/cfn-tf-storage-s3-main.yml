@@ -123,33 +123,8 @@ Resources:
                   - !Ref ReplicationBucketArn
                   - !Sub "${ReplicationBucketArn}/*"
 
-  TfBackendDynamoDbTable:
-    Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
-    Properties:
-      TableName: !Sub ${Prefix}-tfstate-lock-${AWS::Region}
-      BillingMode: PAY_PER_REQUEST
-      PointInTimeRecoverySpecification:
-        PointInTimeRecoveryEnabled: true
-      AttributeDefinitions:
-        - AttributeName: LockID
-          AttributeType: S
-      KeySchema:
-        - AttributeName: LockID
-          KeyType: HASH
-      SSESpecification:
-        SSEEnabled: true
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-backend
-
 Outputs:
   TfBackendBucket:
     Value: !GetAtt TfBackendBucket.Arn
     Export:
       Name: !Sub "${AWS::StackName}-s3-state-arn"
-  TfBackendDynamoDbTable:
-    Value: !GetAtt TfBackendDynamoDbTable.Arn
-    Export:
-      Name: !Sub "${AWS::StackName}-ddb-lock-arn"
