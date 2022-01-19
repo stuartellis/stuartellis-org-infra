@@ -3,6 +3,9 @@ Description: |
   AWS resources for a Terraform backend
 
 Parameters:
+  KmsKeyArn:
+    Type: String
+    Description: The ARN of the KMS customer-managed key
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
@@ -25,6 +28,8 @@ Resources:
           KeyType: HASH
       SSESpecification:
         SSEEnabled: true
+        KMSMasterKeyId: !Ref KmsKeyArn
+        SSEType: KMS
       Tags:
         - Key: sje:purpose
           Value: terraform-backend
