@@ -26,7 +26,8 @@ Resources:
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
+              SSEAlgorithm: "aws:kms"
+              KMSMasterKeyID: !Ref KmsMainKeyArn
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
