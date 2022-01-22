@@ -5,29 +5,32 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
+  KeyName0001:
+    Type: String
+    Description: The name of the KMS key
 
 Resources:
   KmsKey0001:
     Type: AWS::KMS::Key
-    Properties: 
-      Description: !Sub ${Prefix} key
+    Properties:
+      Description: !Sub ${Prefix} ${KeyName0001} key
       Enabled: True
       KeyPolicy:
         Version: 2012-10-17
         Statement:
-        - Effect: Allow
-          Action: kms:*
-          Resource: "*" # Resource must be specified as * in key policies
-          Principal:
-            AWS:  !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root" 
-      EnableKeyRotation: true         
+          - Effect: Allow
+            Action: kms:*
+            Resource: "*" # Resource must be specified as * in key policies
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+      EnableKeyRotation: true
       KeySpec: SYMMETRIC_DEFAULT
       PendingWindowInDays: 7 # Default is 30 days
 
   KmsKey0001Alias:
     Type: AWS::KMS::Alias
-    Properties: 
-      AliasName: !Sub "alias/${Prefix}/tfstate" # Aliases must begin with alias/
+    Properties:
+      AliasName: !Sub "alias/${Prefix}/${KeyName0001}" # Aliases must begin with alias/
       TargetKeyId: !Ref KmsKey0001
 
 Outputs:

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: |
-  AWS resources for a Terraform backend
+  Primary bucket for replication
 
 Parameters:
   Prefix:
@@ -17,12 +17,12 @@ Parameters:
     Description: The ARN of the replica S3 bucket
 
 Resources:
-  TfBackendBucket:
+  PrimaryBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      BucketName: !Sub ${Prefix}-tfstate-main-${AWS::AccountId}-${AWS::Region}
+      BucketName: !Sub ${Prefix}-main-${AWS::AccountId}-${AWS::Region}
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
@@ -36,28 +36,19 @@ Resources:
         RestrictPublicBuckets: true
       VersioningConfiguration:
         Status: Enabled
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-backend
       ReplicationConfiguration:
-        Role: !GetAtt TfBackendBucketReplicationRole.Arn
+        Role: !GetAtt PrimaryBucketReplicationRole.Arn
         Rules:
           - Id: ReplicationToSecondary
             Destination:
               Bucket: !Ref ReplicationBucketArn
-              ReplicationTime:
-                Status: Enabled
-                Time:
-                  Minutes: 15
-            DeleteMarkerReplication:
-              Status: Disabled
             Prefix: ""
             Status: Enabled
 
-  TfBackendBucketPolicy:
+  PrimaryBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref TfBackendBucket
+      Bucket: !Ref PrimaryBucket
       PolicyDocument:
         Statement:
           - Sid: Deny deletion of objects
@@ -65,13 +56,13 @@ Resources:
             Principal: "*"
             Action:
               - "s3:DeleteObject"
-            Resource: !Sub "${TfBackendBucket.Arn}/*"
+            Resource: !Sub "${PrimaryBucket.Arn}/*"
           - Sid: Deny requests that do not use TLS
             Effect: Deny
             Principal: "*"
             Action:
               - "s3:*"
-            Resource: !Sub "${TfBackendBucket.Arn}/*"
+            Resource: !Sub "${PrimaryBucket.Arn}/*"
             Condition:
               Bool:
                 "aws:SecureTransport": "false"
@@ -80,7 +71,7 @@ Resources:
             Principal: "*"
             Action:
               - "s3:PutObject"
-            Resource: !Sub "${TfBackendBucket.Arn}/*"
+            Resource: !Sub "${PrimaryBucket.Arn}/*"
             Condition:
               # The Null-condition allows uploads without encryption information in the request
               # (i.e., requests with default S3 bucket encryption) and the
@@ -94,7 +85,7 @@ Resources:
                   - "AES256"
                   - "aws:kms"
 
-  TfBackendBucketReplicationRole:
+  PrimaryBucketReplicationRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -116,8 +107,8 @@ Resources:
                   - s3:GetObjectVersionAcl
                 Effect: Allow
                 Resource:
-                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-tfstate-main-${AWS::AccountId}-${AWS::Region}"
-                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-tfstate-main-${AWS::AccountId}-${AWS::Region}/*"
+                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-main-${AWS::AccountId}-${AWS::Region}"
+                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-main-${AWS::AccountId}-${AWS::Region}/*"
 
               - Action:
                   - s3:ReplicateObject
@@ -137,7 +128,7 @@ Resources:
                 Condition:
                   StringLike:
                     kms:ViaService: s3.us-west-2.amazonaws.com,
-                    kms:EncryptionContext:aws:s3:arn: !Sub "arn:${AWS::Partition}:s3:::${Prefix}-tfstate-main-${AWS::AccountId}-${AWS::Region}/*"
+                    kms:EncryptionContext:aws:s3:arn: !Sub "arn:${AWS::Partition}:s3:::${Prefix}-main-${AWS::AccountId}-${AWS::Region}/*"
                 Resource: !Ref KmsMainKeyArn
 
               - Action: kms:Encrypt
@@ -149,7 +140,7 @@ Resources:
                 Resource: !Ref KmsReplicaKeyArn
 
 Outputs:
-  TfBackendBucket:
-    Value: !GetAtt TfBackendBucket.Arn
+  PrimaryBucketArn:
+    Value: !GetAtt PrimaryBucket.Arn
     Export:
-      Name: !Sub "${AWS::StackName}-s3-state-arn"
+      Name: !Sub "${AWS::StackName}-s3-arn"

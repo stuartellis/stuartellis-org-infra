@@ -1,0 +1,71 @@
+---
+- name: Deploy CloudFormation for Terraform Storage
+  hosts: localhost
+  vars_prompt:
+    - name: prefix
+      prompt: Specify the prefix for the stacks
+      private: no
+    - name: primary_region
+      prompt: Specify the AWS region for primary storage
+      private: no
+    - name: secondary_region
+      prompt: Specify the AWS region for secondary storage
+      private: no
+
+  tasks:
+    - name: stack for keys in secondary region
+      register: kms_keys_secondary
+      amazon.aws.cloudformation:
+        stack_name: "{{ prefix }}-storage-keys"
+        region: "{{ secondary_region }}"
+        state: "present"
+        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-kms-keys.yml"
+        template_parameters:
+          KeyName0001: tfstate-secondary
+          Prefix: "{{ prefix }}"
+
+    - name: stack for bucket in secondary region
+      register: s3_bucket_secondary
+      amazon.aws.cloudformation:
+        stack_name: "{{ prefix }}-storage-s3"
+        region: "{{ secondary_region }}"
+        state: "present"
+        capabilities: CAPABILITY_NAMED_IAM
+        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-secondary.yml"
+        template_parameters:
+          KmsKeyArn: "{{ kms_keys_secondary.stack_outputs.KmsKey0001Arn }}"
+          Prefix: "{{ prefix }}"
+
+    - name: stack for keys in primary region
+      register: kms_keys_primary
+      amazon.aws.cloudformation:
+        stack_name: "{{ prefix }}-storage-keys"
+        region: "{{ primary_region }}"
+        state: "present"
+        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-kms-keys.yml"
+        template_parameters:
+          KeyName0001: tfstate-primary
+          Prefix: "{{ prefix }}"
+
+    - name: stack for bucket in primary region
+      amazon.aws.cloudformation:
+        stack_name: "{{ prefix }}-storage-s3"
+        region: "{{ primary_region }}"
+        state: "present"
+        capabilities: CAPABILITY_NAMED_IAM
+        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-main.yml"
+        template_parameters:
+          KmsReplicaKeyArn: "{{ kms_keys_secondary.stack_outputs.KmsKey0001Arn }}"
+          KmsMainKeyArn: "{{ kms_keys_primary.stack_outputs.KmsKey0001Arn }}"
+          Prefix: "{{ prefix }}"
+          ReplicationBucketArn: "{{ s3_bucket_secondary.stack_outputs.ReplicaBucketArn }}"
+
+    - name: stack for DynamoDB in primary region
+      amazon.aws.cloudformation:
+        stack_name: "{{ prefix }}-storage-ddb"
+        region: "{{ primary_region }}"
+        state: "present"
+        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-tf-lock-ddb.yml"
+        template_parameters:
+          KmsKeyArn: "{{ kms_keys_primary.stack_outputs.KmsKey0001Arn }}"
+          Prefix: "{{ prefix }}"

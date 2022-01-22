@@ -38,4 +38,4 @@ Outputs:
   TfBackendDynamoDbTable:
     Value: !GetAtt TfBackendDynamoDbTable.Arn
     Export:
-      Name: !Sub "${AWS::StackName}-ddb-lock-arn"
+      Name: !Sub "${AWS::StackName}-ddb-arn"

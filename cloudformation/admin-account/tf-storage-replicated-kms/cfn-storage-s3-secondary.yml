@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: |
-  A replica S3 bucket for a Terraform backend
+  Replication target S3 bucket
 
 Parameters:
   KmsKeyArn:
@@ -11,12 +11,12 @@ Parameters:
     Description: The prefix for AWS resource names
 
 Resources:
-  TfBackendReplicaBucket:
+  ReplicaBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      BucketName: !Sub ${Prefix}-tfstate-replica-${AWS::AccountId}-${AWS::Region}
+      BucketName: !Sub ${Prefix}-replica-${AWS::AccountId}-${AWS::Region}
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
@@ -30,14 +30,11 @@ Resources:
         RestrictPublicBuckets: true
       VersioningConfiguration:
         Status: Enabled
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-backend
 
-  TfBackendReplicaBucketPolicy:
+  ReplicaBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref TfBackendReplicaBucket
+      Bucket: !Ref ReplicaBucket
       PolicyDocument:
         Statement:
           - Sid: Deny deletion of objects
@@ -45,13 +42,13 @@ Resources:
             Principal: "*"
             Action:
               - "s3:DeleteObject"
-            Resource: !Join ["/", [!GetAtt TfBackendReplicaBucket.Arn, "*"]]
+            Resource: !Join ["/", [!GetAtt ReplicaBucket.Arn, "*"]]
           - Sid: Deny requests that do not use TLS
             Effect: Deny
             Principal: "*"
             Action:
               - "s3:*"
-            Resource: !Join ["/", [!GetAtt TfBackendReplicaBucket.Arn, "*"]]
+            Resource: !Join ["/", [!GetAtt ReplicaBucket.Arn, "*"]]
             Condition:
               Bool:
                 "aws:SecureTransport": "false"
@@ -60,7 +57,7 @@ Resources:
             Principal: "*"
             Action:
               - "s3:PutObject"
-            Resource: !Join ["/", [!GetAtt TfBackendReplicaBucket.Arn, "*"]]
+            Resource: !Join ["/", [!GetAtt ReplicaBucket.Arn, "*"]]
             Condition:
               # The Null-condition allows uploads without encryption information in the request
               # (i.e., requests with default S3 bucket encryption) and the
@@ -75,7 +72,7 @@ Resources:
                   - "aws:kms"
 
 Outputs:
-  TfBackendReplicaBucket:
-    Value: !GetAtt TfBackendReplicaBucket.Arn
+  ReplicaBucketArn:
+    Value: !GetAtt ReplicaBucket.Arn
     Export:
-      Name: !Sub "${AWS::StackName}-s3-state-replica-arn"
+      Name: !Sub "${AWS::StackName}-s3-replica-arn"
