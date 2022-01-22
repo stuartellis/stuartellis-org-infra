@@ -16,13 +16,13 @@
       private: no
 
   tasks:
-    - name: stack for keys in secondary region
+    - name: Stack for keys in secondary region
       register: kms_keys_secondary
       amazon.aws.cloudformation:
         stack_name: "{{ namespace }}-{{ stack_prefix }}-storage-keys"
         region: "{{ secondary_region }}"
         state: "present"
-        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-kms-keys.yml"
+        template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-kms-keys.yml"
         template_parameters:
           KeyName0001: tfstate-secondary
           Prefix: "{{ stack_prefix }}"
@@ -31,14 +31,14 @@
           "sje:source": ansible
           "sje:purpose": "{{ namespace }}-{{ stack_prefix }}"
 
-    - name: stack for bucket in secondary region
+    - name: Stack for bucket in secondary region
       register: s3_bucket_secondary
       amazon.aws.cloudformation:
-        stack_name: "{{ namespace }}-{{ stack_prefix }}-storage-s3"
+        stack_name: "{{ namespace }}-{{ stack_prefix }}-s3"
         region: "{{ secondary_region }}"
         state: "present"
         capabilities: CAPABILITY_NAMED_IAM
-        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-secondary.yml"
+        template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-secondary.yml"
         template_parameters:
           KmsKeyArn: "{{ kms_keys_secondary.stack_outputs.KmsKey0001Arn }}"
           Prefix: "{{ stack_prefix }}"
@@ -47,13 +47,13 @@
           "sje:source": ansible
           "sje:purpose": "{{ namespace }}-{{ stack_prefix }}"
 
-    - name: stack for keys in primary region
+    - name: Stack for keys in primary region
       register: kms_keys_primary
       amazon.aws.cloudformation:
-        stack_name: "{{ namespace }}-{{ stack_prefix }}-storage-keys"
+        stack_name: "{{ namespace }}-{{ stack_prefix }}-keys"
         region: "{{ primary_region }}"
         state: "present"
-        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-kms-keys.yml"
+        template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-kms-keys.yml"
         template_parameters:
           KeyName0001: tfstate-primary
           Prefix: "{{ stack_prefix }}"
@@ -62,13 +62,13 @@
           "sje:source": ansible
           "sje:purpose": "{{ namespace }}-{{ stack_prefix }}"
 
-    - name: stack for bucket in primary region
+    - name: Stack for bucket in primary region
       amazon.aws.cloudformation:
-        stack_name: "{{ namespace }}-{{ stack_prefix }}-storage-s3"
+        stack_name: "{{ namespace }}-{{ stack_prefix }}-s3"
         region: "{{ primary_region }}"
         state: "present"
         capabilities: CAPABILITY_NAMED_IAM
-        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-main.yml"
+        template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-main.yml"
         template_parameters:
           KmsReplicaKeyArn: "{{ kms_keys_secondary.stack_outputs.KmsKey0001Arn }}"
           KmsMainKeyArn: "{{ kms_keys_primary.stack_outputs.KmsKey0001Arn }}"
@@ -79,12 +79,12 @@
           "sje:source": ansible
           "sje:purpose": "{{ namespace }}-{{ stack_prefix }}"
 
-    - name: stack for DynamoDB in primary region
+    - name: Stack for DynamoDB in primary region
       amazon.aws.cloudformation:
-        stack_name: "{{ namespace }}-{{ stack_prefix }}-storage-ddb"
+        stack_name: "{{ namespace }}-{{ stack_prefix }}-ddb"
         region: "{{ primary_region }}"
         state: "present"
-        template: "../../cloudformation/admin-account/tf-storage-replicated-kms/cfn-tf-lock-ddb.yml"
+        template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-tf-lock-ddb.yml"
         template_parameters:
           KmsKeyArn: "{{ kms_keys_primary.stack_outputs.KmsKey0001Arn }}"
           Prefix: "{{ stack_prefix }}"
