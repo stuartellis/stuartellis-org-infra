@@ -5,6 +5,9 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
+  UserName:
+    Type: String
+    Description: The unique name for the user account
   TfAccessGroup:
     Type: String
     Description: The group for Terraform users
@@ -15,7 +18,7 @@ Resources:
     Properties:
       Groups:
         - !Ref TfAccessGroup
-      UserName: !Sub ${Prefix}.tfuser
+      UserName: !Sub ${Prefix}.${UserName}
 
 Outputs:
   TfAccessUser0001:

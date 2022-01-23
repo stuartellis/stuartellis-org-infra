@@ -29,7 +29,8 @@
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:prefix": "{{ stack_prefix }}"
 
     - name: Stack for bucket in secondary region
       register: s3_bucket_secondary
@@ -45,7 +46,8 @@
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:prefix": "{{ stack_prefix }}"
 
     - name: Stack for keys in primary region
       register: kms_keys_primary
@@ -60,7 +62,8 @@
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:prefix": "{{ stack_prefix }}"
 
     - name: Stack for bucket in primary region
       amazon.aws.cloudformation:
@@ -72,13 +75,14 @@
         template_parameters:
           KmsReplicaKeyArn: "{{ kms_keys_secondary.stack_outputs.KmsKey0001Arn }}"
           KmsSourceKeyArn: "{{ kms_keys_primary.stack_outputs.KmsKey0001Arn }}"
-          Prefix: "{{ stack_prefix }}"
+          Prefix: "{{ org_namespace }}-{{ stack_prefix }}"
           ReplicaBucketArn: "{{ s3_bucket_secondary.stack_outputs.ReplicaBucketArn }}"
           ReplicaBucketRegion: "{{ secondary_region }}"
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:prefix": "{{ stack_prefix }}"
 
     - name: Stack for DynamoDB in primary region
       amazon.aws.cloudformation:
@@ -88,8 +92,9 @@
         template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-tf-lock-ddb.yml"
         template_parameters:
           KmsKeyArn: "{{ kms_keys_primary.stack_outputs.KmsKey0001Arn }}"
-          Prefix: "{{ stack_prefix }}"
+          Prefix: "{{ org_namespace }}-{{ stack_prefix }}"
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:prefix": "{{ stack_prefix }}"

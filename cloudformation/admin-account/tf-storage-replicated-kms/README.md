@@ -1,1 +1,1 @@
-# TF Replicated Storage
+# Terraform Backend with Replicated Storage

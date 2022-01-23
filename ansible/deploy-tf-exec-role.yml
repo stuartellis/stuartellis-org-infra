@@ -26,4 +26,5 @@
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:prefix": "{{ stack_prefix }}"

@@ -1,5 +1,5 @@
 ---
-- name: Deploy CloudFormation for Terraform access
+- name: Deploy CloudFormation for automated Terraform access
   hosts: localhost
   vars_prompt:
     - name: org_namespace
@@ -42,18 +42,23 @@
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:purpose": "noninteractive"
+          "sje:prefix": "{{ stack_prefix }}"
 
-    - name: Stack for IAM user to access Terraform
+    - name: Stack for IAM user to access Terraform from Azure DevOps
       amazon.aws.cloudformation:
-        stack_name: "{{ org_namespace }}-{{ stack_prefix }}-user"
+        stack_name: "{{ org_namespace }}-{{ stack_prefix }}-ado-user"
         region: us-east-1
         state: "present"
         template: "../cloudformation/admin-account/tf-identity/cfn-tf-access-user.yml"
         template_parameters:
           Prefix: "{{ org_namespace }}-{{ stack_prefix }}"
           TfAccessGroup: "{{ iam_group.stack_outputs.TfAccessGroup }}"
+          UserName: ado
         termination_protection: yes
         tags:
           "sje:source": ansible
-          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+          "sje:namespace": "{{ org_namespace }}"
+          "sje:purpose": "noninteractive"
+          "sje:prefix": "{{ stack_prefix }}"
