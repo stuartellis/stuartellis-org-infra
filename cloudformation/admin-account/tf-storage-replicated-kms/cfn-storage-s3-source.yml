@@ -1,33 +1,36 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: |
-  Primary bucket for replication
+  Source bucket for replication
 
 Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
-  KmsMainKeyArn:
+  KmsSourceKeyArn:
     Type: String
-    Description: The ARN of the key for the main S3 bucket
+    Description: The ARN of the key for the source S3 bucket
   KmsReplicaKeyArn:
     Type: String
     Description: The ARN of the key for the replica S3 bucket
-  ReplicationBucketArn:
+  ReplicaBucketArn:
     Type: String
     Description: The ARN of the replica S3 bucket
+  ReplicaBucketRegion:
+    Type: String
+    Description: The AWS region of the replica S3 bucket
 
 Resources:
-  PrimaryBucket:
+  SourceBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      BucketName: !Sub ${Prefix}-main-${AWS::AccountId}-${AWS::Region}
+      BucketName: !Sub ${Prefix}-source-${AWS::AccountId}-${AWS::Region}
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: "aws:kms"
-              KMSMasterKeyID: !Ref KmsMainKeyArn
+              KMSMasterKeyID: !Ref KmsSourceKeyArn
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
@@ -37,32 +40,38 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       ReplicationConfiguration:
-        Role: !GetAtt PrimaryBucketReplicationRole.Arn
+        Role: !GetAtt SourceBucketReplicationRole.Arn
         Rules:
           - Id: ReplicationToSecondary
             Destination:
-              Bucket: !Ref ReplicationBucketArn
+              Bucket: !Ref ReplicaBucketArn
+              EncryptionConfiguration:
+                ReplicaKmsKeyID: !Ref KmsReplicaKeyArn
+            SourceSelectionCriteria:
+              SseKmsEncryptedObjects:
+                Status: Enabled
             Prefix: ""
             Status: Enabled
 
-  PrimaryBucketPolicy:
+  SourceBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref PrimaryBucket
+      Bucket: !Ref SourceBucket
       PolicyDocument:
+        Version: "2012-10-17"
         Statement:
           - Sid: Deny deletion of objects
             Effect: Deny
             Principal: "*"
             Action:
               - "s3:DeleteObject"
-            Resource: !Sub "${PrimaryBucket.Arn}/*"
+            Resource: !Sub "${SourceBucket.Arn}/*"
           - Sid: Deny requests that do not use TLS
             Effect: Deny
             Principal: "*"
             Action:
               - "s3:*"
-            Resource: !Sub "${PrimaryBucket.Arn}/*"
+            Resource: !Sub "${SourceBucket.Arn}/*"
             Condition:
               Bool:
                 "aws:SecureTransport": "false"
@@ -71,7 +80,7 @@ Resources:
             Principal: "*"
             Action:
               - "s3:PutObject"
-            Resource: !Sub "${PrimaryBucket.Arn}/*"
+            Resource: !Sub "${SourceBucket.Arn}/*"
             Condition:
               # The Null-condition allows uploads without encryption information in the request
               # (i.e., requests with default S3 bucket encryption) and the
@@ -85,9 +94,10 @@ Resources:
                   - "AES256"
                   - "aws:kms"
 
-  PrimaryBucketReplicationRole:
+  SourceBucketReplicationRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: !Sub "${AWS::StackName}-${AWS::Region}-replication"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -99,6 +109,7 @@ Resources:
       Policies:
         - PolicyName: s3-replication-policy
           PolicyDocument:
+            Version: "2012-10-17"
             Statement:
               - Action:
                   - s3:ListBucket
@@ -107,8 +118,8 @@ Resources:
                   - s3:GetObjectVersionAcl
                 Effect: Allow
                 Resource:
-                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-main-${AWS::AccountId}-${AWS::Region}"
-                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-main-${AWS::AccountId}-${AWS::Region}/*"
+                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-source-${AWS::AccountId}-${AWS::Region}"
+                  - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-source-${AWS::AccountId}-${AWS::Region}/*"
 
               - Action:
                   - s3:ReplicateObject
@@ -118,29 +129,35 @@ Resources:
                 Effect: Allow
                 Condition:
                   StringLikeIfExists:
-                    s3:x-amz-server-side-encryption: aws:kms,
-                      AES256
-                    s3:x-amz-server-side-encryption-aws-kms-key-id: !Ref ReplicationBucketArn
-                Resource: !Sub "${ReplicationBucketArn}/*"
+                    s3:x-amz-server-side-encryption:
+                      - aws:kms
+                      - AES256
+                    s3:x-amz-server-side-encryption-aws-kms-key-id:
+                      - !Ref KmsReplicaKeyArn
+                Resource: !Sub "${ReplicaBucketArn}/*"
 
               - Action: kms:Decrypt
                 Effect: Allow
                 Condition:
                   StringLike:
-                    kms:ViaService: s3.us-west-2.amazonaws.com,
-                    kms:EncryptionContext:aws:s3:arn: !Sub "arn:${AWS::Partition}:s3:::${Prefix}-main-${AWS::AccountId}-${AWS::Region}/*"
-                Resource: !Ref KmsMainKeyArn
+                    kms:ViaService: !Sub "s3.${AWS::Region}.amazonaws.com"
+                    kms:EncryptionContext:aws:s3:arn:
+                      - !Sub "arn:${AWS::Partition}:s3:::${Prefix}-source-${AWS::AccountId}-${AWS::Region}/*"
+                Resource:
+                  - !Ref KmsSourceKeyArn
 
               - Action: kms:Encrypt
                 Effect: Allow
                 Condition:
                   StringLike:
-                    kms:ViaService: s3.us-east-1.amazonaws.com,
-                    kms:EncryptionContext:aws:s3:arn: !Sub "${ReplicationBucketArn}/*"
-                Resource: !Ref KmsReplicaKeyArn
+                    kms:ViaService: !Sub "s3.${ReplicaBucketRegion}.amazonaws.com"
+                    kms:EncryptionContext:aws:s3:arn:
+                      - !Sub "${ReplicaBucketArn}/*"
+                Resource:
+                  - !Ref KmsReplicaKeyArn
 
 Outputs:
-  PrimaryBucketArn:
-    Value: !GetAtt PrimaryBucket.Arn
+  SourceBucketArn:
+    Value: !GetAtt SourceBucket.Arn
     Export:
-      Name: !Sub "${AWS::StackName}-s3-arn"
+      Name: !Sub "${AWS::StackName}-s3-source-arn"

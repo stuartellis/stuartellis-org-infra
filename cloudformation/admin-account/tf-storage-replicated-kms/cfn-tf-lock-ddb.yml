@@ -30,9 +30,6 @@ Resources:
         SSEEnabled: true
         KMSMasterKeyId: !Ref KmsKeyArn
         SSEType: KMS
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-backend
 
 Outputs:
   TfBackendDynamoDbTable:

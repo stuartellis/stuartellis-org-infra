@@ -1,0 +1,59 @@
+---
+- name: Deploy CloudFormation for Terraform access
+  hosts: localhost
+  vars_prompt:
+    - name: org_namespace
+      prompt: Specify the namespace
+      private: no
+    - name: stack_prefix
+      prompt: Specify the prefix for the stacks
+      private: no
+    - name: kms_key_arn
+      prompt: Specify the ARN of the KMS key for the Terraform state
+      private: no
+    - name: s3_bucket_arn
+      prompt: Specify the ARN of the S3 bucket for the Terraform state
+      private: no
+    - name: ddb_table_arn
+      prompt: Specify the ARN of the DynamoDB table for Terraform locking
+      private: no
+    - name: same_account_exec_role
+      prompt: Specify the ARN of the role for running Terraform in the same AWS account
+      private: no
+    - name: account_0001_exec_role
+      prompt: Specify the ARN of the role for running Terraform in another AWS account
+      private: no
+
+  tasks:
+    - name: Stack for IAM group to access Terraform
+      register: iam_group
+      amazon.aws.cloudformation:
+        stack_name: "{{ org_namespace }}-{{ stack_prefix }}-group"
+        region: us-east-1
+        state: "present"
+        template: "../cloudformation/admin-account/tf-storage-access/cfn-tf-access-group.yml"
+        template_parameters:
+          Prefix: "{{ org_namespace }}-{{ stack_prefix }}"
+          TfKmsBackendKeyArn: "{{ kms_key_arn }}"
+          TfS3StorageArn: "{{ s3_bucket_arn }}"
+          TfDdbLockingArn: "{{ ddb_table_arn }}"
+          TfArnSameAccountExecRole: "{{ same_account_exec_role }}"
+          TfArnExecRole0001: "{{ account_0001_exec_role }}"
+        termination_protection: yes
+        tags:
+          "sje:source": ansible
+          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"
+
+    - name: Stack for IAM user to access Terraform
+      amazon.aws.cloudformation:
+        stack_name: "{{ org_namespace }}-{{ stack_prefix }}-user"
+        region: us-east-1
+        state: "present"
+        template: "../cloudformation/admin-account/tf-identity/cfn-tf-access-user.yml"
+        template_parameters:
+          Prefix: "{{ org_namespace }}-{{ stack_prefix }}"
+          TfAccessGroup: "{{ iam_group.stack_outputs.TfAccessGroup }}"
+        termination_protection: yes
+        tags:
+          "sje:source": ansible
+          "sje:purpose": "{{ org_namespace }}-{{ stack_prefix }}"

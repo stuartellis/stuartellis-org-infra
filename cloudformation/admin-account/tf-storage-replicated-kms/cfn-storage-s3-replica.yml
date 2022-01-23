@@ -3,7 +3,7 @@ Description: |
   Replication target S3 bucket
 
 Parameters:
-  KmsKeyArn:
+  KmsReplicaKeyArn:
     Type: String
     Description: The ARN of the KMS customer-managed key
   Prefix:
@@ -21,7 +21,7 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: "aws:kms"
-              KMSMasterKeyID: !Ref KmsKeyArn
+              KMSMasterKeyID: !Ref KmsReplicaKeyArn
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true

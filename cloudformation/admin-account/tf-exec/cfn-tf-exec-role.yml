@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: |
-  AWS resources for executing Terraform execution 
+  AWS resources for executing Terraform execution
 Parameters:
   Prefix:
     Type: String
@@ -17,21 +17,17 @@ Resources:
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${Prefix}-tf-exec
+      RoleName: !Sub ${Prefix}-role
       Description: !Sub Terraform execution for ${Prefix}
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - 
-            Effect: "Allow"
-            Principal: 
+          - Effect: "Allow"
+            Principal:
               AWS: !Sub "arn:${AWS::Partition}:iam::${ManagingAccountID}:root"
-            Action: 
+            Action:
               - "sts:AssumeRole"
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-execution
-      ManagedPolicyArns: 
+      ManagedPolicyArns:
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/${ManagedPolicyName}"
 
 Outputs:

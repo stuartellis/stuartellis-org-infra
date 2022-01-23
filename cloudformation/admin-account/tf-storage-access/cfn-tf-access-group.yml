@@ -11,45 +11,44 @@ Parameters:
   TfArnExecRole0001:
     Type: String
     Description: The ARN of the role in an account that is being managed
-  TfImportKmsKeyBackend:
+  TfKmsBackendKeyArn:
     Type: String
-    Description: Name of exported value that provides the ARN of the KMS key for the Terraform state
-  TfImportS3Backend:
+    Description: The ARN of the KMS key for the Terraform state
+  TfS3StorageArn:
     Type: String
-    Description: Name of exported value that provides the ARN of the S3 bucket for the Terraform state
-  TfImportDdbBackend:
+    Description: The ARN of the S3 bucket for the Terraform state
+  TfDdbLockingArn:
     Type: String
-    Description: Name of exported value that provides the ARN of the DynamoDB table for Terraform locking
+    Description: The ARN of the DynamoDB table for Terraform locking
 
 Resources:
-
   TfAccessGroup:
     Type: AWS::IAM::Group
-    Properties: 
-      GroupName: !Sub ${Prefix}-tf-users
+    Properties:
+      GroupName: !Sub ${Prefix}-users
 
   TfManagedAccountsExecPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ${Prefix}-tf-exec
-      Groups: 
-       - !Ref TfAccessGroup
+      PolicyName: !Sub ${Prefix}-exec-policy
+      Groups:
+        - !Ref TfAccessGroup
       PolicyDocument:
         Version: 2012-10-17
         Statement:
           Effect: Allow
-          Action: 
+          Action:
             - sts:AssumeRole
           Resource:
             - !Ref TfArnSameAccountExecRole
             - !Ref TfArnExecRole0001
- 
+
   TfBackendAccessPolicy:
     Type: AWS::IAM::Policy
     Properties:
       PolicyName: !Sub ${Prefix}-tf-backend
-      Groups: 
-       - !Ref TfAccessGroup
+      Groups:
+        - !Ref TfAccessGroup
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -58,25 +57,22 @@ Resources:
               - kms:Decrypt
               - kms:GenerateDataKey
             Resource:
-              - !ImportValue 
-                'Fn::Sub': ${TfImportKmsKeyBackend}
+              - !Ref TfKmsBackendKeyArn
           - Effect: Allow
             Action:
               - s3:ListBucket
             Resource:
-              - !ImportValue 
-                'Fn::Sub': ${TfImportS3Backend}
+              - !Ref TfS3StorageArn
           - Effect: Allow
             Action:
               - s3:PutObject
               - s3:GetObject
               - s3:ListBucket
             Resource:
-              - 'Fn::Join': 
-                - '/'
-                - - !ImportValue
-                    'Fn::Sub': ${TfImportS3Backend}
-                  - '*'
+              - "Fn::Join":
+                  - "/"
+                  - - !Ref TfS3StorageArn
+                    - "*"
           - Effect: Allow
             Action:
               - dynamodb:DeleteItem
@@ -84,21 +80,8 @@ Resources:
               - dynamodb:GetItem
               - dynamodb:PutItem
             Resource:
-              - !ImportValue 
-                'Fn::Sub': ${TfImportDdbBackend}
-
-  TfAccessUser0001:
-    Type: AWS::IAM::User
-    Properties: 
-      Groups: 
-        - !Ref TfAccessGroup
-      UserName: !Sub ${Prefix}.tfuser
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-access
+              - !Ref TfDdbLockingArn
 
 Outputs:
   TfAccessGroup:
     Value: !Ref TfAccessGroup
-  TfAccessUser0001:
-    Value: !Ref TfAccessUser0001

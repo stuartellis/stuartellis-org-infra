@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+  AWS resources for Terraform access
+Parameters:
+  Prefix:
+    Type: String
+    Description: The prefix for AWS resource names
+  TfAccessGroup:
+    Type: String
+    Description: The group for Terraform users
+
+Resources:
+  TfAccessUser0001:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - !Ref TfAccessGroup
+      UserName: !Sub ${Prefix}.tfuser
+
+Outputs:
+  TfAccessUser0001:
+    Value: !Ref TfAccessUser0001

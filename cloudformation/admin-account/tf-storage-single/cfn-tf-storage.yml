@@ -30,9 +30,6 @@ Resources:
               KMSMasterKeyID: !ImportValue
                 "Fn::Sub": ${KmsKeyImport}
             BucketKeyEnabled: true
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-backend
 
   TfBackendBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -59,9 +56,6 @@ Resources:
       AttributeDefinitions:
         - AttributeName: LockID
           AttributeType: S
-      Tags:
-        - Key: sje:purpose
-          Value: terraform-backend
 
 Outputs:
   TfBackendBucket:
