@@ -5,21 +5,15 @@ Parameters:
   Prefix:
     Type: String
     Description: The prefix for AWS resource names
+  TfArnBackendAccessRole:
+    Type: String
+    Description: The ARN of the role to access Terraform backend
   TfArnSameAccountExecRole:
     Type: String
     Description: The ARN of the role in the same AWS account
   TfArnExecRole0001:
     Type: String
     Description: The ARN of the role in an account that is being managed
-  TfKmsBackendKeyArn:
-    Type: String
-    Description: The ARN of the KMS key for the Terraform state
-  TfS3StorageArn:
-    Type: String
-    Description: The ARN of the S3 bucket for the Terraform state
-  TfDdbLockingArn:
-    Type: String
-    Description: The ARN of the DynamoDB table for Terraform locking
 
 Resources:
   TfAccessGroup:
@@ -40,47 +34,9 @@ Resources:
           Action:
             - sts:AssumeRole
           Resource:
+            - !Ref TfArnBackendAccessRole
             - !Ref TfArnSameAccountExecRole
             - !Ref TfArnExecRole0001
-
-  TfBackendAccessPolicy:
-    Type: AWS::IAM::Policy
-    Properties:
-      PolicyName: !Sub ${Prefix}-tf-backend
-      Groups:
-        - !Ref TfAccessGroup
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Action:
-              - kms:Decrypt
-              - kms:GenerateDataKey
-            Resource:
-              - !Ref TfKmsBackendKeyArn
-          - Effect: Allow
-            Action:
-              - s3:ListBucket
-            Resource:
-              - !Ref TfS3StorageArn
-          - Effect: Allow
-            Action:
-              - s3:PutObject
-              - s3:GetObject
-              - s3:ListBucket
-            Resource:
-              - "Fn::Join":
-                  - "/"
-                  - - !Ref TfS3StorageArn
-                    - "*"
-          - Effect: Allow
-            Action:
-              - dynamodb:DeleteItem
-              - dynamodb:DescribeTable
-              - dynamodb:GetItem
-              - dynamodb:PutItem
-            Resource:
-              - !Ref TfDdbLockingArn
 
 Outputs:
   TfAccessGroup:

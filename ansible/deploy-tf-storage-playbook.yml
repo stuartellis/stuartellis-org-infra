@@ -42,7 +42,7 @@
         template: "../cloudformation/admin-account/tf-storage-replicated-kms/cfn-storage-s3-replica.yml"
         template_parameters:
           KmsReplicaKeyArn: "{{ kms_keys_secondary.stack_outputs.KmsKey0001Arn }}"
-          Prefix: "{{ stack_prefix }}"
+          Prefix: "{{ org_namespace }}-{{ stack_prefix }}"
         termination_protection: yes
         tags:
           "sje:source": ansible

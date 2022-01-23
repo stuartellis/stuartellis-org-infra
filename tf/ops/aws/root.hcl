@@ -49,7 +49,7 @@ remote_state {
     key            = "aws/${path_relative_to_include()}/terraform.tfstate"
     region         = "eu-west-1"
     encrypt        = true
-    role_arn       = "arn:aws:iam::119559809358:role/infra-tf-exec"
+    role_arn       = "arn:aws:iam::119559809358:role/stuartellis-org-tf-exec-role"
     dynamodb_table = "infra-tfstate-lock-eu-west-1"
   }
 }

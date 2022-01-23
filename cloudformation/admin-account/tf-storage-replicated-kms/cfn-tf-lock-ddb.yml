@@ -16,7 +16,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: !Sub ${Prefix}-tfstate-lock-${AWS::Region}
+      TableName: !Sub ${Prefix}-lock-${AWS::Region}
       BillingMode: PAY_PER_REQUEST
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: |
-  AWS resources for executing Terraform execution
+  AWS resources for executing Terraform
 Parameters:
   Prefix:
     Type: String
@@ -31,5 +31,5 @@ Resources:
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/${ManagedPolicyName}"
 
 Outputs:
-  ExecutionRole:
-    Value: !Ref ExecutionRole
+  ExecutionRoleArn:
+    Value: !GetAtt ExecutionRole.Arn
