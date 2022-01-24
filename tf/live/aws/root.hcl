@@ -51,6 +51,7 @@ remote_state {
     encrypt        = true
     role_arn       = "arn:aws:iam::119559809358:role/stuartellis-org-tf-access-svc-role"
     dynamodb_table = "stuartellis-org-tf-state-lock-eu-west-2"
+    skip_bucket_versioning = true   # Disables check for bucket versioning
   }
 }
 

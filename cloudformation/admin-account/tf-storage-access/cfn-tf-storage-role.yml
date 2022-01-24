@@ -49,14 +49,17 @@ Resources:
               - !Ref TfKmsBackendKeyArn
           - Effect: Allow
             Action:
-              - s3:ListBucket
+              - s3:GetBucketLocation
+              - s3:List*
             Resource:
-              - !Ref TfS3StorageArn
+              - "Fn::Join":
+                  - "/"
+                  - - !Ref TfS3StorageArn
           - Effect: Allow
             Action:
-              - s3:PutObject
+              - s3:DeleteObject
               - s3:GetObject
-              - s3:ListBucket
+              - s3:PutObject
             Resource:
               - "Fn::Join":
                   - "/"
