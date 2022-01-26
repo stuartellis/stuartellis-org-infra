@@ -6,7 +6,7 @@ To run the Ansible playbook for Terraform execution role:
 
 To run the Ansible playbook for Terraform storage:
 
-    ansible-playbook --connection=local ./ansible/deploy-tf-storage-playbook.yml --extra-vars "org_namespace=stuartellis-org stack_prefix=tf-state primary_region=eu-west-2 secondary_region=eu-west-1"
+    ansible-playbook --connection=local ./ansible/deploy-tf-storage-playbook.yml --extra-vars "org_namespace=stuartellis-org stack_prefix=tf-state primary_region=eu-west-2 replica_region_001=eu-west-1 replica_region_002=eu-central-1"
 
 To run the Ansible playbook for Terraform access for CI automation:
 
