@@ -45,7 +45,7 @@ remote_state {
   }
 
   config = {
-    bucket         = "stuartellis-org-tf-state-source-119559809358-eu-west-2"
+    bucket         = "stuartellis-org-tf-state-primary-119559809358-eu-west-2"
     key            = "aws/${path_relative_to_include()}/terraform.tfstate"
     region         = "eu-west-2"
     encrypt        = true
