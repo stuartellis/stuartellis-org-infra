@@ -45,11 +45,11 @@ remote_state {
   }
 
   config = {
-    bucket         = "stuartellis-org-tf-state-primary-119559809358-eu-west-2"
+    bucket         = "arn:aws:iam::119559809358:role/stuartellis-org-tf-access-svc-backend-access-role"
     key            = "aws/${path_relative_to_include()}/terraform.tfstate"
     region         = "eu-west-2"
     encrypt        = true
-    role_arn       = "arn:aws:iam::119559809358:role/stuartellis-org-tf-access-svc-role"
+    role_arn       = "arn:aws:iam::119559809358:role/stuartellis-org-tf-access-svc-backend-access-role"
     dynamodb_table = "stuartellis-org-tf-state-lock-eu-west-2"
     skip_bucket_versioning = true   # Disables check for bucket versioning
   }
