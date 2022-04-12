@@ -60,8 +60,7 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "azurerm" {
-    features {}
-    location = "${local.merged_config.azure_location}"
+    features { }
     subscription_id = "${local.merged_config.azure_subscription_id}"
     tenant_id = "${local.merged_config.azure_tenant_id}"
 }
