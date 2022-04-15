@@ -46,12 +46,12 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
+  - template: pipeline-templates/terraform/deploy-tf-stack-group-azure.yml@shared
     parameters:
       stageName: dev
       environment: dev
       providerName: azure
-      providerServiceConnection: sje-aws-origin-tf
+      tfStorageServiceConnection: sje-aws-origin-tf
       cloudRegion: eu-west-1
       deploymentVarsGroup: azure-build-payg
       dryRun: ${{ parameters.dryRun }}

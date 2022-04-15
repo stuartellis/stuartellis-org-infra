@@ -48,12 +48,12 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  - template: pipeline-templates/terraform/deploy-tf-stack-group.yml@shared
+  - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
     parameters:
       stageName: dev
       environment: dev
       providerName: aws
-      providerServiceConnection: sje-aws-origin-tf
+      tfStorageServiceConnection: sje-aws-origin-tf
       cloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       runIdentifier: tf-ops-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
