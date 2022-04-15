@@ -53,7 +53,7 @@ stages:
       providerName: azure
       tfStorageServiceConnection: sje-aws-origin-tf
       tfStorageCloudRegion: eu-west-1
-      deploymentVarsGroup: azure-build-payg
+      deploymentVarsGroup: deploy-azure-payg
       dryRun: ${{ parameters.dryRun }}
       runIdentifier: tf-live-azure-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-uksouth-${{ variables.product }}-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/azure/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/uksouth/${{ variables.product }}
