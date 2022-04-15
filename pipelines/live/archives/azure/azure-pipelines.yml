@@ -39,7 +39,7 @@ resources:
     - repository: shared
       type: git
       name: azdo-shared-tasks
-      ref: refs/heads/develop
+      ref: refs/heads/main
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
