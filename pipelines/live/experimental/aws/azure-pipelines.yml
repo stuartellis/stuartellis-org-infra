@@ -13,7 +13,7 @@ variables:
   - template: ../../../../.azure-pipelines/variables.yml
 
   - name: cloudAccount
-    value: stuartellis-origin
+    value: stuartellis-np
 
   - name: productLine
     value: experimental
