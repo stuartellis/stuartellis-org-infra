@@ -50,8 +50,7 @@ stages:
       stageName: dev
       environment: dev
       providerName: aws
-      tfStorageServiceConnection: sje-aws-origin-tf
-      tfStorageCloudRegion: us-east-1
+      deploymentVarsGroup: deploy-aws-np
       dryRun: ${{ parameters.dryRun }}
       runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
@@ -60,3 +59,5 @@ stages:
       terraformInstallationDir: $(Agent.TempDirectory)
       terraformModulesRepo: stuartellis-org-tf-modules
       terraformStacks: ${{ parameters.terraformStacks }}
+      tfStorageCloudRegion: us-east-1
+      tfStorageServiceConnection: sje-aws-origin-tf
