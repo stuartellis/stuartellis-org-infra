@@ -7,8 +7,7 @@ parameters:
     displayName: Terraform stacks
     type: object
     default:
-      dummy_s1: dummy_s1
-      dummy_s2: dummy_s2
+      exp-parameters: exp-parameters
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
@@ -17,10 +16,10 @@ variables:
     value: stuartellis-origin
 
   - name: productLine
-    value: archives_pl
+    value: experimental
 
   - name: product
-    value: archives_stacks
+    value: shared
 
 name: ${{variables.name}}-live-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
@@ -30,9 +29,8 @@ trigger:
       - main
   paths:
     include:
-      - tf/live/aws/*/*/archives_pl/**
+      - tf/live/aws/*/*/experimental/**
     exclude:
-      - CONTRIBUTING.md
       - README.md
 
 resources:
@@ -53,10 +51,10 @@ stages:
       environment: dev
       providerName: aws
       tfStorageServiceConnection: sje-aws-origin-tf
-      tfStorageCloudRegion: eu-west-1
+      tfStorageCloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-eu-west-1-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/eu-west-1/${{ variables.product }}
+      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
       vmImage: ${{ variables.vmImage }}
       terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)

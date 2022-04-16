@@ -7,5 +7,5 @@ terraform {
 }
 
 inputs = {
-  namespace = "cntr/opslab"
+  namespace = "dev/experimental"
 }

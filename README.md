@@ -17,14 +17,15 @@ Top-level directories:
 
 ### Infrastructure Definitions
 
-The *cloudformation* and *tf* directories follow the same structure:
+The *tf* directories follow the same structure:
 
     zone/
         provider/
-            account/
-                product-line/
-                    region/
-                        product/
+            environment/
+                account/
+                    product-line/
+                        region/
+                            product/
 
 > Each *product-line* has a *global* region for resources that are not specific to a region.
 

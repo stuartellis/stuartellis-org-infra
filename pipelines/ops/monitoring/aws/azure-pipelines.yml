@@ -28,12 +28,10 @@ trigger:
   branches:
     include:
       - main
-      - develop # FIXME: Remove this
   paths:
     include:
       - tf/ops/aws/*/*/monitoring/**
     exclude:
-      - CONTRIBUTING.md
       - README.md
 
 resources:
@@ -45,7 +43,7 @@ resources:
     - repository: stuartellis-org-tf-modules
       type: git
       name: stuartellis-org-tf-modules
-      ref: refs/heads/develop
+      ref: refs/heads/main
 
 stages:
   - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
