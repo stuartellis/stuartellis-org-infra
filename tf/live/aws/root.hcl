@@ -66,6 +66,11 @@ provider "aws" {
       role_arn = "${local.merged_config.aws_iam_role}"
       session_name = "tg-${local.merged_config.aws_account_id}"
     }
+    default_tags {
+      tags = {
+        managedby = "Terraform"
+      }
+  }
 }
 EOF
 }
