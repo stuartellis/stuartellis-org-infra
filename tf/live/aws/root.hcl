@@ -68,9 +68,9 @@ provider "aws" {
     }
     default_tags {
       tags = {
-        "sje:tf:environment" = "${local.merged_config.environment}"
-        product = "${local.merged_config.product_name}"
-        managedby   = "${local.merged_config.managed_by}"
+        sje:tf:environment = "${local.merged_config.environment}"
+        sje:tf:product = "${local.merged_config.product_name}"
+        sje:tf:managedby   = "${local.merged_config.managed_by}"
       }
   }
 }
