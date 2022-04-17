@@ -68,7 +68,9 @@ provider "aws" {
     }
     default_tags {
       tags = {
-        managedby = "Terraform"
+        environment = "${local.merged_config.environment}"
+        product = "${local.merged_config.product_name}"
+        managedby   = "${local.merged_config.managed_by}"
       }
   }
 }
