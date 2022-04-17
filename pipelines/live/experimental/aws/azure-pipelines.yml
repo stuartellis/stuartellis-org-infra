@@ -48,7 +48,7 @@ resources:
 stages:
   - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
     parameters:
-      stageName: dev
+      stageName: devUsEast1
       environment: dev
       providerName: aws
       deploymentVarsGroup: deploy-aws-np
@@ -65,7 +65,7 @@ stages:
 
   - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
     parameters:
-      stageName: dev
+      stageName: devEuWest2
       environment: dev
       providerName: aws
       deploymentVarsGroup: deploy-aws-np
