@@ -24,6 +24,7 @@ variables:
 name: ${{variables.name}}-live-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
+  batch: true
   branches:
     include:
       - main
