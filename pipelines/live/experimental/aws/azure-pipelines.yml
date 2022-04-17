@@ -48,23 +48,6 @@ resources:
 stages:
   - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
     parameters:
-      stageName: devUsEast1
-      environment: dev
-      providerName: aws
-      deploymentVarsGroup: deploy-aws-np
-      dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
-      vmImage: ${{ variables.vmImage }}
-      currentCloudRegion: us-east-1
-      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
-      terraformInstallationDir: $(Agent.TempDirectory)
-      terraformModulesRepo: stuartellis-org-tf-modules
-      terraformStacks: ${{ parameters.terraformStacks }}
-      tfStorageServiceConnection: sje-aws-origin-tf
-
-  - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
-    parameters:
       stageName: devEuWest2
       environment: dev
       providerName: aws
