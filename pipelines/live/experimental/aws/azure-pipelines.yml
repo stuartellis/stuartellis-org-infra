@@ -8,6 +8,7 @@ parameters:
     type: object
     default:
       exp-parameters: exp-parameters
+      exp-private-ecr: exp-private-ecr
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
