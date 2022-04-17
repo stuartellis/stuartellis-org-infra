@@ -53,7 +53,7 @@ stages:
       environment: dev
       providerName: aws
       tfStorageServiceConnection: sje-aws-origin-tf
-      tfStorageCloudRegion: us-east-1
+      currentCloudRegion: us-east-1
       dryRun: ${{ parameters.dryRun }}
       runIdentifier: tf-ops-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-us-east-1-${{ variables.product }}-$(Build.BuildId)
       stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/ops/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/us-east-1/${{ variables.product }}
