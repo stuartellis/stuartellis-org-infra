@@ -7,6 +7,7 @@ parameters:
     displayName: Terraform stacks
     type: object
     default:
+      exp-alerts: exp-alerts
       exp-parameters: exp-parameters
       exp-private-ecr: exp-private-ecr
 
