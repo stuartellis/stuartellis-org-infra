@@ -8,7 +8,6 @@ parameters:
     type: object
     default:
       exp-channels: exp-channels
-      exp-billing-monitoring: exp-billing-monitoring
       exp-parameters: exp-parameters
       exp-private-ecr: exp-private-ecr
 
