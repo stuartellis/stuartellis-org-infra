@@ -3,10 +3,10 @@ include {
 }
 
 terraform {
-  source = "../../../../../../../../../../stuartellis-org-tf-modules//azure/resource_group"
+  source = "../../../../../../../../../../stuartellis-org-tf-modules//azure/vnet_minimal"
 }
 
 inputs = {
-  name = "exp-vnet-0010"
+  name     = "exp-vnet-0010"
   location = "uksouth"
 }

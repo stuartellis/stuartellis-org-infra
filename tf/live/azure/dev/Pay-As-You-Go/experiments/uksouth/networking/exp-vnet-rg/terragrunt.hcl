@@ -7,6 +7,6 @@ terraform {
 }
 
 inputs = {
-  name = "exp-rg"
+  name     = "exp-vnet-0010"
   location = "uksouth"
 }

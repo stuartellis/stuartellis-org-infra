@@ -7,7 +7,7 @@ parameters:
     displayName: Terraform stacks
     type: object
     default:
-      exp-rg: exp-rg
+      exp-vnet-rg: exp-vnet-rg
       exp-vnet: exp-vnet
 
 variables:
