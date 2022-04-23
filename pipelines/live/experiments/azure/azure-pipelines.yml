@@ -8,6 +8,7 @@ parameters:
     type: object
     default:
       exp-rg: exp-rg
+      exp-vnet: exp-vnet
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
