@@ -6,7 +6,7 @@ terraform {
   source = "../../../../../../../../../../stuartellis-org-tf-modules//azure/resource_group"
 }
 
-inputs {
+inputs = {
   name = "exp-rg"
   location = "uksouth"
 }
