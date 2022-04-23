@@ -1,0 +1,66 @@
+parameters:
+  - name: dryRun
+    displayName: Dry run only
+    type: boolean
+    default: false
+  - name: terraformStacks
+    displayName: Terraform stacks
+    type: object
+    default:
+      exp-channels: exp-channels
+      exp-parameters: exp-parameters
+      exp-private-ecr: exp-private-ecr
+
+variables:
+  - template: ../../../../.azure-pipelines/variables.yml
+
+  - name: cloudAccount
+    value: stuartellis-np
+
+  - name: productLine
+    value: experimental
+
+  - name: product
+    value: shared
+
+name: ${{variables.name}}-live-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - tf/live/aws/*/*/experiments/**
+    exclude:
+      - README.md
+
+resources:
+  repositories:
+    - repository: shared
+      type: git
+      name: azdo-shared-tasks
+      ref: refs/heads/main
+    - repository: stuartellis-org-tf-modules
+      type: git
+      name: stuartellis-org-tf-modules
+      ref: refs/heads/develop
+
+stages:
+  - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
+    parameters:
+      stageName: devEuWest2
+      environment: dev
+      providerName: aws
+      deploymentVarsGroup: deploy-aws-dev-np
+      dryRun: ${{ parameters.dryRun }}
+      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-eu-west-2-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/eu-west-2/${{ variables.product }}
+      vmImage: ${{ variables.vmImage }}
+      currentCloudRegion: eu-west-2
+      terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
+      terraformInstallationDir: $(Agent.TempDirectory)
+      terraformModulesRepo: stuartellis-org-tf-modules
+      terraformStacks: ${{ parameters.terraformStacks }}
+      tfStorageServiceConnection: sje-aws-origin-tf

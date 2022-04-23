@@ -7,23 +7,21 @@ parameters:
     displayName: Terraform stacks
     type: object
     default:
-      exp-channels: exp-channels
-      exp-parameters: exp-parameters
-      exp-private-ecr: exp-private-ecr
+      exp-rg: exp-rg
 
 variables:
   - template: ../../../../.azure-pipelines/variables.yml
 
   - name: cloudAccount
-    value: stuartellis-np
+    value: Pay-As-You-Go
 
   - name: productLine
-    value: experimental
+    value: experiments
 
   - name: product
-    value: shared
+    value: networking
 
-name: ${{variables.name}}-live-${{ variables.productLine }}-aws-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
+name: ${{variables.name}}-live-${{ variables.productLine }}-azure-${{ variables.product }}-$(Date:yyyyMMddhhmm).$(Rev:r)
 
 trigger:
   batch: true
@@ -32,7 +30,7 @@ trigger:
       - main
   paths:
     include:
-      - tf/live/aws/*/*/experimental/**
+      - tf/live/azure/*/*/experiments/**
     exclude:
       - README.md
 
@@ -48,17 +46,17 @@ resources:
       ref: refs/heads/develop
 
 stages:
-  - template: pipeline-templates/terraform/deploy-tf-stack-group-aws.yml@shared
+  - template: pipeline-templates/terraform/deploy-tf-stack-group-azure.yml@shared
     parameters:
-      stageName: devEuWest2
+      stageName: devUkSouth
       environment: dev
-      providerName: aws
-      deploymentVarsGroup: deploy-aws-np
+      providerName: azure
+      deploymentVarsGroup: deploy-azure-dev-payg
       dryRun: ${{ parameters.dryRun }}
-      runIdentifier: tf-live-aws-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-eu-west-2-${{ variables.product }}-$(Build.BuildId)
-      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/aws/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/eu-west-2/${{ variables.product }}
+      runIdentifier: tf-live-azure-dev-${{ variables.cloudAccount }}-${{ variables.productLine }}-uksouth-${{ variables.product }}-$(Build.BuildId)
+      stackGroupPath: $(Build.Repository.LocalPath)/${{ variables.name }}/tf/live/azure/dev/${{ variables.cloudAccount }}/${{ variables.productLine }}/uksouth/${{ variables.product }}
       vmImage: ${{ variables.vmImage }}
-      currentCloudRegion: eu-west-2
+      currentCloudRegion: uksouth
       terraformConfigDir: $(Build.Repository.LocalPath)/$(Build.Repository.Name)
       terraformInstallationDir: $(Agent.TempDirectory)
       terraformModulesRepo: stuartellis-org-tf-modules
