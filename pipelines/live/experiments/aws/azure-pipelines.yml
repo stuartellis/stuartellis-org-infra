@@ -18,7 +18,7 @@ variables:
     value: stuartellis-np
 
   - name: productLine
-    value: experimental
+    value: experiments
 
   - name: product
     value: shared
